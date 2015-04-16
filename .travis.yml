@@ -1,0 +1,31 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  # - "3.2"
+env:
+  - MC_VERSION=1.8
+before_install:
+  - wget http://hg.effbot.org/pil-117/raw/f356a1f64271/libImaging/Imaging.h
+  - wget http://hg.effbot.org/pil-117/raw/f356a1f64271/libImaging/ImPlatform.h
+install:
+  - pip install -q pillow
+  - pip install -q numpy
+  - python setup.py build
+before_script:
+  - git clone git://github.com/overviewer/Minecraft-Overviewer-Addons.git ~/mcoa/
+  - wget -N https://s3.amazonaws.com/Minecraft.Download/versions/${MC_VERSION}/${MC_VERSION}.jar -P ~/.minecraft/versions/${MC_VERSION}/
+script:
+  - PYTHONPATH=. python test/test_all.py
+  - python overviewer.py ~/mcoa/exmaple ~/test-output --rendermodes=smooth-lighting -p1
+notifications:
+  email: false
+  irc:
+    channels:
+      - "irc.freenode.org#overviewer"
+    skip_join: true
+    template:
+      - "\x0313Minecraft-Overviewer\x03/\x0306%{branch}\x03 \x0314%{commit}\x03 %{build_url} %{message}"
+# matrix:
+  # allow_failures:
+    # - python: "3.2"
