@@ -1,16 +1,14 @@
-#-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
-#
-# Author:      SchoolWInternet
-#
-# Created:     17/04/2015
-# Copyright:   (c) SchoolWInternet 2015
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
+import sys
+from PyQt4 import QtCore, QtGui, uic
 
-def main():
-    pass
+form_class = uic.loadUiType("ui/opening.ui")[0]
 
-if __name__ == '__main__':
-    main()
+class MyWindowClass(QtGui.QMainWindow, form_class):
+    def __init__(self, parent=None):
+        QtGui.QMainWindow.__init__(self, parent)
+        self.setupUi(self)
+
+app = QtGui.QApplication(sys.argv)
+myWindow = MyWindowClass()
+myWindow.show()
+app.exec_()
