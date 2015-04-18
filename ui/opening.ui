@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Map Gen</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="newc">
    <property name="geometry">
     <rect>
      <x>139</x>
@@ -44,7 +44,7 @@
  config</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="open">
    <property name="geometry">
     <rect>
      <x>10</x>
