@@ -4,7 +4,7 @@ from PyQt4 import QtCore, QtGui, uic
 if sys.platform == "win32":
     global ops
     ops = "32"
-elif sys.platform == "win64"
+elif sys.platform == "win64":
     global ops
     ops = "64"
 elif sys.platform != "win64" and sys.platform != "win32":
