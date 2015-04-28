@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Windows Newbie Guide &mdash; Overviewer 0.11 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Overviewer 0.11 documentation" href="../index.html" />
+    <link rel="next" title="Frequently Asked Questions" href="../faq.html" />
+    <link rel="prev" title="Signs and Markers" href="../signs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../faq.html" title="Frequently Asked Questions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../signs.html" title="Signs and Markers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Overviewer 0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="windows-newbie-guide">
+<h1>Windows Newbie Guide<a class="headerlink" href="#windows-newbie-guide" title="Permalink to this headline">¶</a></h1>
+<p>If you&#8217;re running Windows and aren&#8217;t as familiar with the Windows command
+prompt as the rest of the documentation assumes you are, this page is for you!</p>
+<p>The Overviewer is a <em>command line</em> tool, which means you will need to use the command line to run it.</p>
+<dl class="docutils">
+<dt><strong>First step:</strong> Open the command line.</dt>
+<dd><p class="first">Open your Start menu and type in the box &#8216;cmd&#8217; and press enter. If you&#8217;re
+running XP you&#8217;ll go to the &#8220;run&#8221; option instead and then type &#8216;cmd&#8217; and
+press enter.</p>
+<img alt="../_images/opening_cmd.png" src="../_images/opening_cmd.png" />
+<p>This should bring up the <em>command prompt</em>, a black window with a prompt
+where you can type <em>commands</em>. The prompt part will probably look something
+like <tt class="docutils literal"><span class="pre">C:\Users\andrew&gt;</span></tt> followed by a cursor where you type your commands.</p>
+<img alt="../_images/cmd.png" src="../_images/cmd.png" />
+<p class="last">Leave this window open and move on to step 2.</p>
+</dd>
+</dl>
+<p>Now that you know how to open a command line, and haven&#8217;t been scared off yet,
+the next step is to download the latest Overviewer.</p>
+<dl class="docutils">
+<dt><strong>Step 2:</strong> Download Overviewer</dt>
+<dd><p class="first">Go to the <a class="reference external" href="http://overviewer.org/downloads">Downloads Page</a> and
+download the <em>latest</em> version for your architecture, either 32 bit
+or 64 bit.</p>
+<p><em>This is important. If you don&#8217;t know which to choose, 32 or 64,</em> then you
+can find out by clicking on the start menu, <em>right clicking</em> on the
+&#8220;Computer&#8221; icon or &#8220;My Computer&#8221; icon (depending on your version of
+Windows), and then selecting &#8220;Properties.&#8221; Somewhere among the information
+about your computer it should tell you if you&#8217;re running a <em>32 bit operating
+system</em> or <em>64 bit operating system</em>.</p>
+<img alt="../_images/computer_properties.png" src="../_images/computer_properties.png" />
+<img alt="../_images/system.png" src="../_images/system.png" />
+<p class="last">Once you know if your computer is 32 or 64 bit, go and download the latest
+version. We make small changes all the time, and a new version is uploaded
+to that page for every change we make. It&#8217;s usually best to just get the
+latest.</p>
+</dd>
+</dl>
+<p>Okay, you&#8217;ve got a command prompt open. You&#8217;ve got The Overviewer downloaded.
+We&#8217;re half way there!</p>
+<dl class="docutils">
+<dt><strong>Step 3:</strong> Extract the Overviewer zip you downloaded.</dt>
+<dd><p class="first">This is easy. I assume you know how to unzip things. Unzip the contents to
+somewhere you can find easily. You&#8217;ll need to find it in the command
+prompt. It may help to leave the window with the unzipped contents open so
+you can remind yourself where it is.</p>
+<p><em>Keep all those files together!</em> They&#8217;re all needed to run The Overviewer.</p>
+<img alt="../_images/extracting.png" class="last" src="../_images/extracting.png" />
+</dd>
+<dt><strong>Step 4:</strong> Change directory in command prompt to the location of overviewer.exe</dt>
+<dd><p class="first">You remember the location of the files you just extracted? Windows doesn&#8217;t
+always make it easy. Here&#8217;s how in windows 7: just click on the little icon
+to the left of the directory name.</p>
+<img alt="../_images/location1.png" src="../_images/location1.png" />
+<img alt="../_images/location2.png" src="../_images/location2.png" />
+<p>Got the location? Good. We&#8217;re going to <em>change directory</em> to that directory
+with the command prompt. Bring the command prompot window back up. The
+command we&#8217;re going to use is called <tt class="docutils literal"><span class="pre">cd</span></tt>, it stands for ... <em>change
+directory</em>!</p>
+<p>I&#8217;m going to illustrate this with an example. Let&#8217;s say you extracted
+Overviewer to the directory
+<tt class="docutils literal"><span class="pre">c:\users\andrew\overviewer</span></tt>. Here is exactly
+what you&#8217;ll type into the command prompt and then press enter:</p>
+<div class="highlight-python"><pre>cd c:\users\andrew\overviewer</pre>
+</div>
+<img alt="../_images/changed_dir.png" src="../_images/changed_dir.png" />
+<p class="last">Okay, did it work? Your command <em>prompt</em> should now have the <em>current
+working directory</em> in it. If your prompt changed to the directory that you
+just cd&#8217;d to, then your current directory changed successfully! You&#8217;re ready
+for the next step!</p>
+</dd>
+</dl>
+<p>Okay before we actually run Overviewer for real, let&#8217;s do a checkpoint. You
+should have <em>cd</em>&#8216;d to the directory where overviewer.exe is. To test, type this
+in and you should see the help text print out:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">overviewer</span><span class="o">.</span><span class="n">exe</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>note the two hyphens before &#8220;help&#8221;. You should see something like this:</p>
+<img alt="../_images/usage.png" src="../_images/usage.png" />
+<p>The help text displays the <em>usage</em> of overviewer.exe, or the parameters it takes
+to run it. It&#8217;s kind of long, I had to make my window larger to show it all.</p>
+<div class="highlight-python"><pre>Usage:
+overviewer.exe [--rendermodes=...] [options] &lt;World&gt; &lt;Output Dir&gt;</pre>
+</div>
+<p>Command line tool usage convention says that items in [square brackets] are
+<em>optional</em>, while items in &lt;angled brackets&gt; are <em>required</em>.</p>
+<dl class="docutils">
+<dt><strong>Step 5</strong> Render a map!</dt>
+<dd><p class="first">Okay, so to render a map, you have to run <tt class="docutils literal"><span class="pre">overviewer.exe</span></tt> with two
+<em>parameters</em>: the <em>world path</em> and a <em>destination directory</em>.</p>
+<p>Let&#8217;s say you have a world named &#8220;Singleplayer world&#8221; and you want to put
+the tiles into a directory on your desktop. Singleplayer worlds are stored
+on your hard drive at a location called <tt class="docutils literal"><span class="pre">%appdata%\.minecraft\saves</span></tt>. Try
+typing this into the command prompt:</p>
+<div class="highlight-python"><pre>overviewer.exe "%appdata%\.minecraft\saves\Singleplayer World" c:\users\andrew\desktop\mymap</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must use quotation marks around a path that has spaces in it.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">%appdata%</span></tt> is a special windows &#8220;variable&#8221; that refers to the
+location on your drive where applications can store their data. Typing
+<tt class="docutils literal"><span class="pre">%appdata%</span></tt> instead of the full path is a convenient shortcut.</p>
+</div>
+<p>If everything went according to plan, The Overviewer should now be churning
+away furiously on your world, rendering thousands of image files that
+compose a map of your world.</p>
+<p class="last">When it&#8217;s done, open up the file <tt class="docutils literal"><span class="pre">index.html</span></tt> in a web browser and you
+should see your map!</p>
+</dd>
+</dl>
+<p>I hope this has been enough to get some of you Windows noobs started on The
+Overviewer. Sorry there&#8217;s no easy-to-use graphical interface right now. We want
+to make one, we really do, but we haven&#8217;t had the time and the talent to do so
+yet.</p>
+<p>The preferred way to run The Overviewer is with a <em>configuration file</em>. Without
+one, you can only do the most basic of renders. Once you&#8217;re ready, head to the
+<a class="reference internal" href="../config.html"><em>The Configuration File</em></a> page to see what else The Overviewer can do. And as always,
+feel free to drop by in <a class="reference external" href="http://overviewer.org/irc/">IRC</a> if you have any
+questions! We&#8217;re glad to help!</p>
+<div class="section" id="common-pitfalls">
+<h2>Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p class="first">Wrong working directory:</p>
+<div class="highlight-python"><pre>"overviewer.exe" is not recognised as an internal or external
+command, operable program, or batch file.</pre>
+</div>
+<p>This is a common mistake to make, especially for people unfamiliar
+with the command line. This happens if your current working directory
+does not contain overviewer.exe. This is likely because you&#8217;ve forgot
+to change the working directory to the directory you have unzipped
+overviewer into. Re-read Step 4 for instructions on how to do that.</p>
+</li>
+<li><p class="first">Overviewer is on a different drive than C:</p>
+<p>You may have Overviewer located on a different partition than C:,
+and for some odd reason the windows command line does not accept
+&#8220;cd D:&#8221; as a way to switch partitions. To do this, you have to just
+type the drive letter followed by a colon:</p>
+<div class="highlight-python"><pre>D:</pre>
+</div>
+<p>This should switch your current working directory to D:</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="using-github-gist">
+<h2>Using GitHub Gist<a class="headerlink" href="#using-github-gist" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes, when helping people with issues with Overviewer, we&#8217;ll often
+ask to see the config file you&#8217;re using, or, if there was an Overviewer
+error, a full copy of an error message.   Unfortunately, <a class="reference external" href="http://overviewer.org/irc/">IRC</a>
+is not a good way to send large amounts of text.  So we often ask users
+to create a <a class="reference external" href="http://gist.github.com/">Gist</a> containing the text we want
+to see.  Sites like these are also called Pastebins, and you are welcome
+to use your favorite pastebin site, if you&#8217;d like.</p>
+<ul>
+<li><p class="first">First, go to <a class="reference external" href="http://gist.github.com/">http://gist.github.com/</a></p>
+</li>
+<li><p class="first">Second, paste your text into the primary text entry area:</p>
+<blockquote>
+<div><img alt="../_images/gist1.png" src="../_images/gist1.png" />
+</div></blockquote>
+</li>
+<li><p class="first">Third, click the &#8216;Create Secret Gist&#8217; button.  A secret gist means that
+only someone with the exact URL can view your gist</p>
+<blockquote>
+<div><img alt="../_images/gist2.png" src="../_images/gist2.png" />
+</div></blockquote>
+</li>
+<li><p class="first">Finally, send us the URL.  This will let us easily view your properly formatted Gist.</p>
+<blockquote>
+<div><img alt="../_images/gist3.png" src="../_images/gist3.png" />
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Windows Newbie Guide</a><ul>
+<li><a class="reference internal" href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a class="reference internal" href="#using-github-gist">Using GitHub Gist</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../signs.html"
+                        title="previous chapter">Signs and Markers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../faq.html"
+                        title="next chapter">Frequently Asked Questions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/win_tut/windowsguide.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../faq.html" title="Frequently Asked Questions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../signs.html" title="Signs and Markers"
+             >previous</a> |</li>
+        <li><a href="../index.html">Overviewer 0.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014 The Overviewer Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
