@@ -58,9 +58,9 @@ class Start ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def new( self, event ):
-		event.Skip()
+		print "new"
 
 	def load( self, event ):
-		event.Skip()
+		print "load"
 
 

@@ -1,12 +1,12 @@
 #-------------------------------------------------------------------------------
 # Name:        Start
-# Purpose:
+# Purpose:     The core of the Program
 #
 # Author:      ParkerMc
 #
 # Created:     03/05/2016
 # Copyright:   (c) ParkerMc 2016
-# Licence:     GNU
+# Licence:     MIT
 #-------------------------------------------------------------------------------
 import wx, ui
 
