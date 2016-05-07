@@ -12,10 +12,11 @@ import wx, ui
 
 def main():
     app = wx.App(False)
+    MySplash = ui.Splach()
+    MySplash.Show()
     frame = ui.Start(None)
     frame.Show(True)
     app.MainLoop()
 
 if __name__ == '__main__':
     main()
-
