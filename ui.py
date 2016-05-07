@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+#-------------------------------------------------------------------------------
+# Name:        ui
+# Purpose:     To store and handle the gui
+#
+# Author:      ParkerMc
+#
+# Created:     03/05/2016
+# Copyright:   (c) ParkerMc 2016
+# Licence:     MIT
+#-------------------------------------------------------------------------------
 
 ###########################################################################
 ## Python code generated with wxFormBuilder (version Jun 17 2015)
