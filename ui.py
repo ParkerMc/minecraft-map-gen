@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
-# Name:        ui
-# Purpose:     To store and handle the gui
+# Name:		ui
+# Purpose:	 To store and handle the gui
 #
-# Author:      ParkerMc
+# Author:	  ParkerMc
 #
-# Created:     03/05/2016
+# Created:	 03/05/2016
 # Copyright:   (c) ParkerMc 2016
-# Licence:     MIT
+# Licence:	 MIT
 #-------------------------------------------------------------------------------
 
 ###########################################################################
@@ -19,11 +19,11 @@
 
 import wx
 import wx.xrc
-import wx.html
+import wx.richtext
 import os
 
 global configa
-configa = ["",1,"",[""],[("",0,0,0,0,"",0,95)]]
+configa = ["",1,"",[],[]]
 
 ###########################################################################
 ## Class Start
@@ -63,11 +63,11 @@ class Start ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def newf( self, event ):
-         mset = MainSet(None)
-         mset.Show(True)
-         self.HideWithEffect(0)
-         self.Destroy()
-         event.Skip()
+		 mset = MainSet(None)
+		 mset.Show(True)
+		 self.HideWithEffect(0)
+		 self.Destroy()
+		 event.Skip()
 
 	def loadf( self, event ):
 		event.Skip()
@@ -135,9 +135,9 @@ class load ( wx.Frame ):
 		event.Skip()
 
 	def quit( self, event ):
-         mset = arequit(None,self)
-         mset.Show(True)
-         event.Skip()
+		 mset = arequit(None,self)
+		 mset.Show(True)
+		 event.Skip()
 
 
 ###########################################################################
@@ -215,22 +215,22 @@ class MainSet ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def quit( self, event ):
-         mset = arequit(None,self)
-         mset.Show(True)
-         event.Skip()
+		 mset = arequit(None,self)
+		 mset.Show(True)
+		 event.Skip()
 
 
 	def nextp( self, event ):
-         global configa
-         configa[0] = self.out.GetPath()
-         configa[1] = self.pro.GetValue()
-         configa[2] = self.save.GetPath()
-         world = Worlds(None)
-         world.Show(True)
-         self.HideWithEffect(0)
-         self.Destroy()
-         event.Skip()
-         event.Skip()
+		 global configa
+		 configa[0] = self.out.GetPath()
+		 configa[1] = self.pro.GetValue()
+		 configa[2] = self.save.GetPath()
+		 world = Worlds(None)
+		 world.Show(True)
+		 self.HideWithEffect(0)
+		 self.Destroy()
+		 event.Skip()
+		 event.Skip()
 
 
 ###########################################################################
@@ -244,7 +244,7 @@ class Worlds ( wx.Frame ):
 		self.listChoices = []
 		for i in configa[3]:
 		  if i != "":
-		      listChoices.append(i)
+			  listChoices.append(i)
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Minecraft Map Gen", pos = wx.DefaultPosition, size = wx.Size( 365,385 ), style = wx.CAPTION|wx.MAXIMIZE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHintsSz( wx.Size( 365,385 ), wx.Size( 365,385 ) )
@@ -301,31 +301,31 @@ class Worlds ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def add( self, event ):
-         if os.path.isfile(self.worlddir.GetPath()+"/level.dat"):
-            self.listChoices.append(self.worlddir.GetPath())
-            self.list.Set(self.listChoices)
-            self.worlddir.SetPath("")
-            self.listChoices.sort()
-         event.Skip()
+		 if os.path.isfile(self.worlddir.GetPath()+"/level.dat"):
+			self.listChoices.append(self.worlddir.GetPath())
+			self.list.Set(self.listChoices)
+			self.worlddir.SetPath("")
+			self.listChoices.sort()
+		 event.Skip()
 
 	def dela( self, event):
-         self.listChoices.pop(self.list.GetSelection())
-         self.list.Set(self.listChoices)
-         event.Skip()
+		 self.listChoices.pop(self.list.GetSelection())
+		 self.list.Set(self.listChoices)
+		 event.Skip()
 
 	def quit( self, event ):
-         mset = arequit(None,self)
-         mset.Show(True)
-         event.Skip()
+		 mset = arequit(None,self)
+		 mset.Show(True)
+		 event.Skip()
 
 	def nextp( self, event ):
-         global configa
-         configa[3] = self.listChoices
-         mapsf = maps(None)
-         mapsf.Show(True)
-         self.HideWithEffect(0)
-         self.Destroy()
-         event.Skip()
+		 global configa
+		 configa[3] = self.listChoices
+		 mapsf = maps(None)
+		 mapsf.Show(True)
+		 self.HideWithEffect(0)
+		 self.Destroy()
+		 event.Skip()
 
 
 ###########################################################################
@@ -335,6 +335,7 @@ class Worlds ( wx.Frame ):
 class maps ( wx.Frame ):
 
 	def __init__( self, parent ):
+		global configa
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Minecraft Map Gen", pos = wx.DefaultPosition, size = wx.Size( 305,345 ), style = wx.CAPTION|wx.MAXIMIZE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHintsSz( wx.Size( 305,345 ), wx.Size( 305,345 ) )
@@ -350,8 +351,8 @@ class maps ( wx.Frame ):
 
 		gbSizer3.Add( self.renders, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
-		listChoices = []
-		self.list = wx.ListBox( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, listChoices, 0 )
+		self.listChoices = []
+		self.list = wx.ListBox( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, self.listChoices, 0 )
 		self.list.SetMinSize( wx.Size( 280,200 ) )
 
 		gbSizer3.Add( self.list, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 4 ), wx.ALL, 5 )
@@ -383,6 +384,9 @@ class maps ( wx.Frame ):
 		self.re.Bind( wx.EVT_BUTTON, self.dela )
 		self.can.Bind( wx.EVT_BUTTON, self.quit )
 		self.next.Bind( wx.EVT_BUTTON, self.nextp )
+		for i, j, k, l, m, n, o, p in configa[4]:
+		  self.listChoices.append(i)
+		self.list.Set(self.listChoices)
 
 	def __del__( self ):
 		pass
@@ -390,21 +394,56 @@ class maps ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def add( self, event ):
+		editf = edit(None, ["",0,0,0,0,"",0,95], False, self)
+		editf.Show()
 		event.Skip()
 
 	def edit( self, event ):
+		settings = []
+		q = 0
+		for i, j, k, l, m, n, o, p in configa[4]:
+		  if i == self.listChoices[self.list.GetSelection()]:
+		      settings[0] = i
+		      settings[1] = j
+		      settings[2] = k
+		      settings[3] = l
+		      settings[4] = m
+		      settings[5] = n
+		      settings[6] = o
+		      settings[7] = p
+		  q += 1
+		self.dela(event)
+		editf = edit(None, settings, True, self)
+		editf.Show()
 		event.Skip()
 
 	def dela( self, event ):
-		event.Skip()
+		 q = 0
+		 for i, j, k, l, m, n, o, p in configa[4]:
+		  if i == self.listChoices[self.list.GetSelection()]:
+			  configa[4].pop(q)
+		  q += 1
+
+		 self.listChoices.pop(self.list.GetSelection())
+		 self.list.Set(self.listChoices)
+		 event.Skip()
 
 	def quit( self, event ):
-         mset = arequit(None,self)
-         mset.Show(True)
-         event.Skip()
+		 mset = arequit(None,self)
+		 mset.Show(True)
+		 event.Skip()
 
 	def nextp( self, event ):
-		event.Skip()
+		 outf = out(None)
+		 outf.Show(True)
+		 self.HideWithEffect(0)
+		 self.Destroy()
+		 event.Skip()
+	def reload(self):
+		 self.listChoices = []
+		 for i, j, k, l, m, n, o, p in configa[4]:
+		  self.listChoices.append(i)
+		 self.list.Set(self.listChoices)
 
 
 ###########################################################################
@@ -412,8 +451,10 @@ class maps ( wx.Frame ):
 ###########################################################################
 
 class edit ( wx.Frame ):
-
-	def __init__( self, parent, settings ):
+	def __init__( self, parent, settings, editb , self2):
+		self.self = self2
+		self.settings = settings
+		self.editbool = editb
 		global configa
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Minecraft Map Gen", pos = wx.DefaultPosition, size = wx.Size( 316,318 ), style = 0|wx.TAB_TRAVERSAL )
 
@@ -452,7 +493,7 @@ class edit ( wx.Frame ):
 
 		gbSizer6.Add( self.m_staticText9, wx.GBPosition( 3, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
-		rmodeChoices = [ u"Normal", u"Lighting", u"Smooth Lighting", u"Night", u"Mooth Night", u"Smooth Night", u"Nether Lighting", u"Nether Smooth Lighting", u"Cave", u"Nether Lighting", u"Nether" ]
+		rmodeChoices = [ u"Normal", u"Lighting", u"Smooth Lighting", u"Night", u"Smooth Night", u"Nether", u"Nether Lighting", u"Nether Smooth Lighting", u"Cave" ]
 		self.rmode = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, rmodeChoices, 0 )
 		self.rmode.SetSelection( 0 )
 		gbSizer6.Add( self.rmode, wx.GBPosition( 3, 1 ), wx.GBSpan( 1, 2 ), wx.ALL, 5 )
@@ -476,6 +517,7 @@ class edit ( wx.Frame ):
 
 		self.m_filePicker2 = wx.FilePickerCtrl( self, wx.ID_ANY, wx.EmptyString, u"Select a Texture Pack", u"*.zip", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
 		gbSizer6.Add( self.m_filePicker2, wx.GBPosition( 5, 1 ), wx.GBSpan( 1, 2 ), wx.ALL, 5 )
+		self.m_filePicker2.Enable(False)
 
 		self.m_staticText12 = wx.StaticText( self, wx.ID_ANY, u"Image Format", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText12.Wrap( -1 )
@@ -522,14 +564,14 @@ class edit ( wx.Frame ):
 		self.can.Bind( wx.EVT_BUTTON, self.quit )
 		self.add.Bind( wx.EVT_BUTTON, self.addm )
 
-        self.name.SetValue(settings[0])
-        self.world.SetSelection(settings[1])
-        self.dimension.SetSelection(settings[2])
-        self.rmode.SetSelection(settings[3])
-        self.north.SetSelection(settings[4])
-        self.m_filePicker2.SetPath(settings[5])
-        self.iformat.SetSelection(settings[6])
-        self.m_spinCtrl2.SetValue(settings[7])
+		self.name.SetValue(settings[0])
+		self.world.SetSelection(settings[1])
+		self.dimension.SetSelection(settings[2])
+		self.rmode.SetSelection(settings[3])
+		self.north.SetSelection(settings[4])
+		self.m_filePicker2.SetPath(settings[5])
+		self.iformat.SetSelection(settings[6])
+		self.m_spinCtrl2.SetValue(settings[7])
 
 	def __del__( self ):
 		pass
@@ -537,14 +579,20 @@ class edit ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def quit( self, event ):
+		global configa
+		if self.editbool==True:
+		  configa[4].append((self.settings[0], self.settings[1], self.settings[2], self.settings[3], self.settings[4], self.settings[5], self.settings[6], self.settings[7]))
+		  configa[4].sort()
+		  maps.reload(self.self)
 		self.HideWithEffect(0)
 		self.Destroy()
 		event.Skip()
 
 	def addm( self, event ):
 		global configa
-		configa[4].append((self.name.GetValue,self.world.GetSelection(),self.dimension.GetSelection,self.rmode.GetSelection,self.north.GetSelection,self.m_filePicker2.GetPath,self.iformat.GetCount,self.m_spinCtrl2.GetValue()))
+		configa[4].append((self.name.GetValue(),self.world.GetSelection(),self.dimension.GetSelection(),self.rmode.GetSelection(),self.north.GetSelection(),self.m_filePicker2.GetPath(),self.iformat.GetCount(),self.m_spinCtrl2.GetValue()))
 		configa[4].sort()
+		maps.reload(self.self)
 		self.HideWithEffect(0)
 		self.Destroy()
 		event.Skip()
@@ -566,14 +614,14 @@ class out ( wx.Frame ):
 		gbSizer7.SetFlexibleDirection( wx.BOTH )
 		gbSizer7.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-		self.out = wx.html.HtmlWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 450,300 ), wx.html.HW_SCROLLBAR_AUTO )
-		gbSizer7.Add( self.out, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 3 ), wx.ALL, 5 )
-
 
 		gbSizer7.AddSpacer( ( 350, 0 ), wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND, 5 )
 
 		self.Cancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gbSizer7.Add( self.Cancel, wx.GBPosition( 1, 1 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+		self.outt = wx.richtext.RichTextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 450,300 ), 0|wx.VSCROLL|wx.HSCROLL|wx.NO_BORDER|wx.WANTS_CHARS )
+		gbSizer7.Add( self.outt, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 3 ), wx.EXPAND |wx.ALL, 5 )
 
 
 		self.SetSizer( gbSizer7 )
@@ -582,17 +630,74 @@ class out ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
-		self.Cancel.Bind( wx.EVT_BUTTON, self.can )
+		self.Cancel.Bind( wx.EVT_BUTTON, self.canc )
+
+
+		global configa
+		output = "#Made with a generator by ParkerMc\n"
+		for i in configa:
+		  output += "#"+str(i)+"\n"
+		j = 0
+		output +="\n \n"
+		for i in configa[3]:
+		  k = i.replace("\\","/")
+		  output += 'worlds["world'+str(j)+'"] = "'+ k +'"\n'
+		  j+=1
+		for i, j, k, l, m, n, o, p in configa[4]:
+		  if l == 0:
+		      l = "normal"
+		  if l == 1:
+		      l = "lighting"
+		  if l == 2:
+		      l = "smooth_lighting"
+		  if l == 3:
+		      l = "night"
+		  if l == 4:
+		      l = "smooth_night"
+		  if l == 5:
+		      l = "nether"
+		  if l == 6:
+		      l = "nether_lighting"
+		  if l == 7:
+		      l = "nether_smooth_lighting"
+		  if l == 8:
+		      l = "cave"
+		  if k == 0:
+		      k = "overworld"
+		  if k == 1:
+		      k = "nether"
+		  if k == 2:
+		      k = "end"
+		  if m == 0:
+		      m = "upper-left"
+		  if m == 1:
+		      m = "upper-right"
+		  if m == 2:
+		      m = "lower-left"
+		  if m == 3:
+		      m = "lower-right"
+		  if o == 3:
+		      o = "png"
+		  if o == 1:
+		      o = "jpg"
+		  if o == 2:
+		      o = "jpeg"
+
+		  output += 'renders["'+str(i)+'"] = {\n    "world": "world'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'+str(l)+'",\n    "dimension": "'+str(k)+'",\n    "northdirection" : "'+str(m)+'",\n    "imgformat" : "'+str(o)+'",\n    "imgquality" : "'+str(p)+'",\n } \n \n'
+		output += 'outputdir = "'+configa[0].replace("\\","/")+'"'
+		f = open(configa[2].replace("\\","/"),"w")
+		f.write(output)
+		f.close()
 
 	def __del__( self ):
 		pass
 
 
 	# Virtual event handlers, overide them in your derived class
-	def can( self, event ):
-         mset = arequit(None,self)
-         mset.Show(True)
-         event.Skip()
+	def canc( self, event ):
+		 mset = arequit(None,self)
+		 mset.Show(True)
+		 event.Skip()
 
 
 ###########################################################################
@@ -602,36 +707,36 @@ class out ( wx.Frame ):
 class arequit ( wx.Frame ):
 
 	def __init__( self, parent, self2 ):
-         wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 210,93 ), style = 0|wx.TAB_TRAVERSAL )
-         self.self2 = self2
-         self.SetSizeHintsSz( wx.Size( 210,93 ), wx.Size( 210,93 ) )
-         self.SetBackgroundColour( wx.Colour( 160, 160, 160 ) )
+		 wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 210,93 ), style = 0|wx.TAB_TRAVERSAL )
+		 self.self2 = self2
+		 self.SetSizeHintsSz( wx.Size( 210,93 ), wx.Size( 210,93 ) )
+		 self.SetBackgroundColour( wx.Colour( 160, 160, 160 ) )
 
-         gbSizer9 = wx.GridBagSizer( 0, 0 )
-         gbSizer9.SetFlexibleDirection( wx.BOTH )
-         gbSizer9.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		 gbSizer9 = wx.GridBagSizer( 0, 0 )
+		 gbSizer9.SetFlexibleDirection( wx.BOTH )
+		 gbSizer9.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-         self.m_staticText16 = wx.StaticText( self, wx.ID_ANY, u"Are you sure you would like to\nClose with out saveing?", wx.DefaultPosition, wx.DefaultSize, 0 )
-         self.m_staticText16.Wrap( -1 )
-         self.m_staticText16.SetFont( wx.Font( 10, 70, 90, 90, False, wx.EmptyString ) )
+		 self.m_staticText16 = wx.StaticText( self, wx.ID_ANY, u"Are you sure you would like to\nClose with out saveing?", wx.DefaultPosition, wx.DefaultSize, 0 )
+		 self.m_staticText16.Wrap( -1 )
+		 self.m_staticText16.SetFont( wx.Font( 10, 70, 90, 90, False, wx.EmptyString ) )
 
-         gbSizer9.Add( self.m_staticText16, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 2 ), wx.ALL, 5 )
+		 gbSizer9.Add( self.m_staticText16, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 2 ), wx.ALL, 5 )
 
-         self.m_button19 = wx.Button( self, wx.ID_ANY, u"Yes", wx.DefaultPosition, wx.DefaultSize, 0 )
-         gbSizer9.Add( self.m_button19, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+		 self.m_button19 = wx.Button( self, wx.ID_ANY, u"Yes", wx.DefaultPosition, wx.DefaultSize, 0 )
+		 gbSizer9.Add( self.m_button19, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
-         self.m_button20 = wx.Button( self, wx.ID_ANY, u"No", wx.DefaultPosition, wx.DefaultSize, 0 )
-         gbSizer9.Add( self.m_button20, wx.GBPosition( 1, 1 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+		 self.m_button20 = wx.Button( self, wx.ID_ANY, u"No", wx.DefaultPosition, wx.DefaultSize, 0 )
+		 gbSizer9.Add( self.m_button20, wx.GBPosition( 1, 1 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
 
-         self.SetSizer( gbSizer9 )
-         self.Layout()
+		 self.SetSizer( gbSizer9 )
+		 self.Layout()
 
-         self.Centre( wx.BOTH )
+		 self.Centre( wx.BOTH )
 
-         # Connect Events
-         self.m_button19.Bind( wx.EVT_BUTTON, self.clo )
-         self.m_button20.Bind( wx.EVT_BUTTON, self.nocl )
+		 # Connect Events
+		 self.m_button19.Bind( wx.EVT_BUTTON, self.clo )
+		 self.m_button20.Bind( wx.EVT_BUTTON, self.nocl )
 
 	def __del__( self ):
 		pass
@@ -639,16 +744,16 @@ class arequit ( wx.Frame ):
 
 	# Virtual event handlers, overide them in your derived class
 	def clo( self, event ):
-         self.HideWithEffect(0)
-         self.Destroy()
-         self.self2.HideWithEffect(0)
-         self.self2.Destroy()
-         event.Skip()
+		 self.HideWithEffect(0)
+		 self.Destroy()
+		 self.self2.HideWithEffect(0)
+		 self.self2.Destroy()
+		 event.Skip()
 
 	def nocl( self, event ):
-         self.HideWithEffect(0)
-         self.Destroy()
-         event.Skip()
+		 self.HideWithEffect(0)
+		 self.Destroy()
+		 event.Skip()
 
 
 
@@ -657,25 +762,25 @@ class arequit ( wx.Frame ):
 ###########################################################################
 
 class Splach(wx.SplashScreen):
-    """
+	"""
 Create a splash screen widget.
-    """
-    def __init__(self, parent=None):
-        # This is a recipe to a the screen.
-        # Modify the following variables as necessary.
-        aBitmap = wx.Image(name = "splach.png").ConvertToBitmap()
-        splashStyle = wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT
-        splashDuration = 2500 # milliseconds
-        # Call the constructor with the above arguments in exactly the
-        # following order.
-        wx.SplashScreen.__init__(self, aBitmap, splashStyle,
-                                 splashDuration, parent)
-        self.Bind(wx.EVT_CLOSE, self.OnExit)
+	"""
+	def __init__(self, parent=None):
+		# This is a recipe to a the screen.
+		# Modify the following variables as necessary.
+		aBitmap = wx.Image(name = "splach.png").ConvertToBitmap()
+		splashStyle = wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT
+		splashDuration = 2500 # milliseconds
+		# Call the constructor with the above arguments in exactly the
+		# following order.
+		wx.SplashScreen.__init__(self, aBitmap, splashStyle,
+								 splashDuration, parent)
+		self.Bind(wx.EVT_CLOSE, self.OnExit)
 
-        wx.Yield()
+		wx.Yield()
 #----------------------------------------------------------------------#
 
-    def OnExit(self, evt):
-        self.HideWithEffect(0)
-        # The program will freeze without this line.
-        evt.Skip()  # Make sure the default handler runs too...
+	def OnExit(self, evt):
+		self.HideWithEffect(0)
+		# The program will freeze without this line.
+		evt.Skip()  # Make sure the default handler runs too...
