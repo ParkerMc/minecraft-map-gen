@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 # Name:        Start
-# Purpose:     The core of the Program
+# Purpose:     The stater of the Program
 #
 # Author:      ParkerMc
 #

@@ -19,11 +19,19 @@
 
 import wx
 import wx.xrc
-import wx.richtext
+import wx.html
 import os
+import core
+import subprocess
+import wx.richtext
 
+f = open("os","r")
+global osc
+osc = f.readline()
+f.close()
 global configa
-configa = ["",1,"",[],[]]
+#configa = ["",1,"",[],[]]
+configa = ["K:\\test",1, "K:\\test\\test.cfg", [u'C:\\Users\\SchoolWInternet\\AppData\\Roaming\\.minecraft\\saves\\World1'], [(u'test', 0, 0, 0, 0, u'', 3, 95)]]
 
 ###########################################################################
 ## Class Start
@@ -244,7 +252,7 @@ class Worlds ( wx.Frame ):
 		self.listChoices = []
 		for i in configa[3]:
 		  if i != "":
-			  listChoices.append(i)
+			  self.listChoices.append(i)
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Minecraft Map Gen", pos = wx.DefaultPosition, size = wx.Size( 365,385 ), style = wx.CAPTION|wx.MAXIMIZE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHintsSz( wx.Size( 365,385 ), wx.Size( 365,385 ) )
@@ -605,6 +613,8 @@ class edit ( wx.Frame ):
 class out ( wx.Frame ):
 
 	def __init__( self, parent ):
+		self.time = 0
+
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Minecraft Map Gen", pos = wx.DefaultPosition, size = wx.Size( 475,380 ), style = wx.CAPTION|wx.MAXIMIZE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHintsSz( wx.Size( 475,380 ), wx.Size( 475,380 ) )
@@ -619,10 +629,8 @@ class out ( wx.Frame ):
 
 		self.Cancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gbSizer7.Add( self.Cancel, wx.GBPosition( 1, 1 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
-
-		self.outt = wx.richtext.RichTextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 450,300 ), 0|wx.VSCROLL|wx.HSCROLL|wx.NO_BORDER|wx.WANTS_CHARS )
-		gbSizer7.Add( self.outt, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 3 ), wx.EXPAND |wx.ALL, 5 )
-
+		self.outt = wx.richtext.RichTextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 450,300 ), 0|wx.TE_READONLY|wx.VSCROLL|wx.HSCROLL|wx.NO_BORDER|wx.WANTS_CHARS )
+		gbSizer7.Add( self.outt, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 2 ), wx.ALL, 5 )
 
 		self.SetSizer( gbSizer7 )
 		self.Layout()
@@ -630,6 +638,7 @@ class out ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_ACTIVATE, self.runcfg )
 		self.Cancel.Bind( wx.EVT_BUTTON, self.canc )
 
 
@@ -698,6 +707,29 @@ class out ( wx.Frame ):
 		 mset = arequit(None,self)
 		 mset.Show(True)
 		 event.Skip()
+
+   	def runcfg( self, event ):
+		self.time += 1
+		global osc
+		if osc == "win32" and self.time == 1:
+		  proc = subprocess.Popen("32bit\\overviewer.exe --config="+configa[2].replace("\\","/"), shell=True,
+                            stdout=subprocess.PIPE)
+		  print "32"
+		if osc == "win64" and self.time == 1:
+		  proc = subprocess.Popen("64bit\\overviewer.exe --config="+configa[2].replace("\\","/"), shell=True,
+                            stdout=subprocess.PIPE)
+		if osc == "linux" and self.time == 1:
+		  proc = subprocess.Popen("linux\\overviewer.py --config="+configa[2].replace("\\","/"), shell=True,
+                            stdout=subprocess.PIPE)
+		while True:
+		  line = proc.stdout.readline()
+		  if line.strip() == "":
+		      pass
+		  else:
+		      self.outt.AddParagraph(line.strip())
+		  if not line: break
+		proc.wait()
+		event.Skip()
 
 
 ###########################################################################
