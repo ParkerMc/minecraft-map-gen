@@ -1,9 +1,12 @@
+#os file
+os
+
 #Overviwer
 32bit/
 64bit/
 linux/
-#
 
+#temp forlder
 temp/
 
 # Byte-compiled / optimized / DLL files
