@@ -12,9 +12,9 @@
 #-------------------------------------------------------------------------------
 #Config:
 var = "0.12.109"
-windows32 = "http://overviewer.org/builds/win32/8/overviewer-0.12.109.zip"
-windows64 = "http://overviewer.org/builds/win64/7/overviewer-0.12.109.zip"
-linux = "http://overviewer.org/builds/src/7/overviewer-0.12.109.tar.gz"
+windows32 = "https://overviewer.org/builds/win32/8/overviewer-0.12.109.zip"
+windows64 = "https://overviewer.org/builds/win64/7/overviewer-0.12.109.zip"
+linux = "https://overviewer.org/builds/src/7/overviewer-0.12.109.tar.gz"
 #-------------------------------------------------------------------------------
 import urllib, zipfile, tarfile, os, shutil;
 cwd = os.getcwd()
