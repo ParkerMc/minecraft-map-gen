@@ -19,7 +19,6 @@
 
 import wx
 import wx.xrc
-import wx.html
 import os
 import core
 import subprocess
@@ -30,8 +29,8 @@ global osc
 osc = f.readline()
 f.close()
 global configa
-#configa = ["",1,"",[],[]]
-configa = ["K:\\test",1, "K:\\test\\test.cfg", [u'C:\\Users\\SchoolWInternet\\AppData\\Roaming\\.minecraft\\saves\\World1'], [(u'test', 0, 0, 0, 0, u'', 3, 95)]]
+configa = ["",1,"",[],[]]
+#configa = ["K:\\test",1, "K:\\test\\test.cfg", [u'C:\\Users\\SchoolWInternet\\AppData\\Roaming\\.minecraft\\saves\\World1'], [(u'test', 0, 0, 0, 0, u'', 3, 95)]]
 
 ###########################################################################
 ## Class Start
@@ -54,7 +53,7 @@ class Start ( wx.Frame ):
 
 		self.load = wx.Button( self, wx.ID_ANY, u"Load Config", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gbSizer1.Add( self.load, wx.GBPosition( 0, 1 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
-
+		self.load.Enable(False)
 
 		self.SetSizer( gbSizer1 )
 		self.Layout()
@@ -719,7 +718,7 @@ class out ( wx.Frame ):
 		  proc = subprocess.Popen("64bit\\overviewer.exe --config="+configa[2].replace("\\","/"), shell=True,
                             stdout=subprocess.PIPE)
 		if osc == "linux" and self.time == 1:
-		  proc = subprocess.Popen("linux\\overviewer.py --config="+configa[2].replace("\\","/"), shell=True,
+		  proc = subprocess.Popen("./linux/overviewer.py --config="+configa[2].replace("\\","/"), shell=True,
                             stdout=subprocess.PIPE)
 		while True:
 		  line = proc.stdout.readline()
