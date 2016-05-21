@@ -612,6 +612,7 @@ class edit ( wx.Frame ):
 class out ( wx.Frame ):
 
 	def __init__( self, parent ):
+		self.running = True
 		self.time = 0
 
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Minecraft Map Gen", pos = wx.DefaultPosition, size = wx.Size( 475,380 ), style = wx.CAPTION|wx.MAXIMIZE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
@@ -720,13 +721,14 @@ class out ( wx.Frame ):
 		if osc == "linux" and self.time == 1:
 		  proc = subprocess.Popen("./linux/overviewer.py --config="+configa[2].replace("\\","/"), shell=True,
                             stdout=subprocess.PIPE)
-		while True:
+		if self.running:
+		  wx.YieldIfNeeded()
 		  line = proc.stdout.readline()
 		  if line.strip() == "":
 		      pass
 		  else:
 		      self.outt.AddParagraph(line.strip())
-		  if not line: break
+		  if not line: self.running = False
 		proc.wait()
 		event.Skip()
 
@@ -799,7 +801,7 @@ Create a splash screen widget.
 	def __init__(self, parent=None):
 		# This is a recipe to a the screen.
 		# Modify the following variables as necessary.
-		aBitmap = wx.Image(name = "splach.png").ConvertToBitmap()
+		aBitmap = wx.Image(name = "assets/splach.png").ConvertToBitmap()
 		splashStyle = wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT
 		splashDuration = 2500 # milliseconds
 		# Call the constructor with the above arguments in exactly the

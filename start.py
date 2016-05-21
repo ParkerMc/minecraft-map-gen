@@ -8,7 +8,13 @@
 # Copyright:   (c) ParkerMc 2016
 # Licence:     MIT
 #-------------------------------------------------------------------------------
-import wx, ui
+import os
+import ui
+import wx
+import wx.xrc
+import core
+import subprocess
+import wx.richtext
 
 def main():
     app = wx.App(False)
