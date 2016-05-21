@@ -799,7 +799,7 @@ Create a splash screen widget.
 	def __init__(self, parent=None):
 		# This is a recipe to a the screen.
 		# Modify the following variables as necessary.
-		aBitmap = wx.Image(name = "splach.png").ConvertToBitmap()
+		aBitmap = wx.Image(name = "assets/splach.png").ConvertToBitmap()
 		splashStyle = wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT
 		splashDuration = 2500 # milliseconds
 		# Call the constructor with the above arguments in exactly the
