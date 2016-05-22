@@ -140,10 +140,3 @@ class Main(QtGui.QMainWindow, form_class):
 ##		f = open(configa[2].replace("\\","/"),"w")
 ##		f.write(output)
 ##		f.close()
-
-
-
-app = QtGui.QApplication(sys.argv)
-myWindow = Main()
-myWindow.show()
-app.exec_()
