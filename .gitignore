@@ -13,6 +13,7 @@ temp/
 __pycache__/
 *.py[cod]
 *.~py
+*.~pyw
 
 # C extensions
 *.so
