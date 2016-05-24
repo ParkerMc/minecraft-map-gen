@@ -54,7 +54,7 @@
      </font>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="documentMode">
      <bool>false</bool>
@@ -277,73 +277,306 @@
      <attribute name="title">
       <string>Maps</string>
      </attribute>
-     <widget class="QPushButton" name="EditMap">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>13</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
+     <widget class="QTableWidget" name="Maps">
+      <property name="enabled">
+       <bool>true</bool>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Edit</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="DelaMap">
-      <property name="geometry">
-       <rect>
-        <x>193</x>
-        <y>13</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Delate</string>
-      </property>
-     </widget>
-     <widget class="QTableView" name="Maps">
       <property name="geometry">
        <rect>
         <x>7</x>
-        <y>50</y>
+        <y>9</y>
         <width>770</width>
-        <height>420</height>
+        <height>461</height>
        </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
       </property>
       <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
+       <enum>QAbstractItemView::SelectItems</enum>
       </property>
+      <property name="rowCount">
+       <number>2</number>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <row>
+       <property name="text">
+        <string>header</string>
+       </property>
+      </row>
+      <row/>
+      <column>
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>World</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Dimension</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Rendermode</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>North Direction</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Image Format</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Image Quality</string>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>World</string>
+       </property>
+      </item>
+      <item row="0" column="2">
+       <property name="text">
+        <string>Dimension</string>
+       </property>
+      </item>
+      <item row="0" column="3">
+       <property name="text">
+        <string>Rendermode</string>
+       </property>
+      </item>
+      <item row="0" column="4">
+       <property name="text">
+        <string>North Direction</string>
+       </property>
+      </item>
+      <item row="0" column="5">
+       <property name="text">
+        <string>Image Format</string>
+       </property>
+      </item>
+      <item row="0" column="6">
+       <property name="text">
+        <string>Image Quality</string>
+       </property>
+      </item>
+      <item row="1" column="2">
+       <property name="text">
+        <string>Overworld</string>
+       </property>
+      </item>
+      <item row="1" column="3">
+       <property name="text">
+        <string>Normal</string>
+       </property>
+      </item>
+      <item row="1" column="4">
+       <property name="text">
+        <string>Upper Left</string>
+       </property>
+      </item>
+      <item row="1" column="5">
+       <property name="text">
+        <string>Jpg</string>
+       </property>
+      </item>
+      <item row="1" column="6">
+       <property name="text">
+        <string>95</string>
+       </property>
+      </item>
      </widget>
-     <widget class="QPushButton" name="addMap">
+     <widget class="QComboBox" name="World">
       <property name="geometry">
        <rect>
-        <x>7</x>
-        <y>13</y>
-        <width>75</width>
-        <height>23</height>
+        <x>108</x>
+        <y>40</y>
+        <width>100</width>
+        <height>30</height>
        </rect>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Add</string>
-      </property>
      </widget>
+     <widget class="QComboBox" name="Dimension">
+      <property name="geometry">
+       <rect>
+        <x>208</x>
+        <y>40</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Overworld</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Nether</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>End</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="rmode">
+      <property name="geometry">
+       <rect>
+        <x>308</x>
+        <y>40</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Normal</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Lighting</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Smooth Light</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Night</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Smooth Night</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Cave</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="nDir">
+      <property name="geometry">
+       <rect>
+        <x>408</x>
+        <y>40</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Upper Left</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Upper Right</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Lower Left</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Lower Right</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="imgfor">
+      <property name="geometry">
+       <rect>
+        <x>508</x>
+        <y>40</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Png</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Jpg</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Jpeg</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="rmoden">
+      <property name="geometry">
+       <rect>
+        <x>308</x>
+        <y>40</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Normal</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Lighting</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Smooth Light</string>
+       </property>
+      </item>
+     </widget>
+     <zorder>rmoden</zorder>
+     <zorder>Maps</zorder>
+     <zorder>World</zorder>
+     <zorder>Dimension</zorder>
+     <zorder>rmode</zorder>
+     <zorder>nDir</zorder>
+     <zorder>imgfor</zorder>
     </widget>
    </widget>
    <widget class="QCommandLinkButton" name="run">
