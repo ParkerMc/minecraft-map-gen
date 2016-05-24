@@ -54,7 +54,7 @@
      </font>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="documentMode">
      <bool>false</bool>
@@ -609,7 +609,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionRun"/>
-    <addaction name="actionClose_2"/>
+    <addaction name="actionClose"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -623,17 +623,17 @@
     <string>Save</string>
    </property>
   </action>
-  <action name="actionClose">
-   <property name="text">
-    <string>Close</string>
-   </property>
-  </action>
   <action name="actionRun">
    <property name="text">
     <string>Run</string>
    </property>
   </action>
-  <action name="actionClose_2">
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionClose_3">
    <property name="text">
     <string>Close</string>
    </property>

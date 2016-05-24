@@ -28,6 +28,7 @@ class Main(QtGui.QMainWindow, form_class):
         self.outputb.clicked.connect(self.outputbf)
         self.packb.clicked.connect(self.packbf)
         self.actionOpen.triggered.connect(self.actionOpenf)
+        self.actionSave.triggered.connect(self.save)
         self.Worlds.cellDoubleClicked.connect(self.path)
         self.Worlds.cellClicked.connect(self.path)
         self.Worlds.cellEntered.connect(self.path)
@@ -96,8 +97,10 @@ class Main(QtGui.QMainWindow, form_class):
         item.setText(self.World.itemText(a))
         self.Maps.setItem(self.lmr,1,item)
         self.worldsgen()
+        self.newrowmap()
 
     def oncchangemap(self,a,b):
+        self.newrowmap()
         if a == 0:
             item = QtGui.QTableWidgetItem()
             if b == 0:
@@ -125,11 +128,30 @@ class Main(QtGui.QMainWindow, form_class):
         self.worldsgen()
 
     def worldsgen(self):
+        self.maps = []
         for i in range(1,self.Maps.rowCount()):
             try:
                 if str(self.Maps.item(i,0).text()).replace(" ","")!="" and str(self.Maps.item(i,1).text()).replace(" ","")!="":
                     self.maps.append((str(self.Maps.item(i,0).text()),str(self.Maps.item(i,1).text()),str(self.Maps.item(i,2).text()),str(self.Maps.item(i,3).text()),str(self.Maps.item(i,4).text()),str(self.Maps.item(i,5).text()),str(self.Maps.item(i,6).text())))
             except: None
+
+    def newrowmap(self):
+        try:
+            if self.Maps.item(self.Maps.rowCount()-1,0).text().replace(" ","") != "":self.Maps.setRowCount(self.Maps.rowCount()+1)
+        except: None
+        try:
+            if self.Maps.item(self.Maps.rowCount()-1,1).text().replace(" ","") != "":self.Maps.setRowCount(self.Maps.rowCount()+1)
+        except: None
+        for i in range(1,self.Maps.rowCount()-2):
+            removeroww = True
+            try:
+                if self.Maps.item(i,0).text().replace(" ","") != "": removeroww = False
+            except: None
+            try:
+                if self.Maps.item(i,1).text().replace(" ","") != "": removeroww = False
+            except: None
+            if removeroww == True:
+                self.Maps.removeRow(i)
 
     def onchangemap(self,a,b,c=0,d=0):
         self.lmr = a
@@ -284,55 +306,18 @@ class Main(QtGui.QMainWindow, form_class):
     def save(self):
         if self.filep == "":
             self.filep = QtGui.QFileDialog.getSaveFileName(filter="Config File (*.cfg)")
-            output = "#Made with a generator by ParkerMc\n"
-            output += "#"+self.outputt.text()+"\n"+ "#"+self.packt.text()+"\n#"+str(self.processes.value())+"\n#"+str(self.worlds).replace("[","").replace("]","")+"\n \n"
-            for i, j in self.worlds:
-                object += 'worlds["'+j+'"] = "'+ k +'"\n'
-##		for i, j, k, l, m, n, o, p in configa[4]:
-##		  if l == 0:
-##		      l = "normal"
-##		  if l == 1:
-##		      l = "lighting"
-##		  if l == 2:
-##		      l = "smooth_lighting"
-##		  if l == 3:
-##		      l = "night"
-##		  if l == 4:
-##		      l = "smooth_night"
-##		  if l == 5:
-##		      l = "nether"
-##		  if l == 6:
-##		      l = "nether_lighting"
-##		  if l == 7:
-##		      l = "nether_smooth_lighting"
-##		  if l == 8:
-##		      l = "cave"
-##		  if k == 0:
-##		      k = "overworld"
-##		  if k == 1:
-##		      k = "nether"
-##		  if k == 2:
-##		      k = "end"
-##		  if m == 0:
-##		      m = "upper-left"
-##		  if m == 1:
-##		      m = "upper-right"
-##		  if m == 2:
-##		      m = "lower-left"
-##		  if m == 3:
-##		      m = "lower-right"
-##		  if o == 3:
-##		      o = "png"
-##		  if o == 1:
-##		      o = "jpg"
-##		  if o == 2:
-##		      o = "jpeg"
-##
-##		  output += 'renders["'+str(i)+'"] = {\n    "world": "world'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'+str(l)+'",\n    "dimension": "'+str(k)+'",\n    "northdirection" : "'+str(m)+'",\n    "imgformat" : "'+str(o)+'",\n    "imgquality" : "'+str(p)+'",\n } \n \n'
-##		output += 'outputdir = "'+configa[0].replace("\\","/")+'"'
-##		f = open(configa[2].replace("\\","/"),"w")
-##		f.write(output)
-##		f.close()
+        output = "#Made with a generator by ParkerMc\n"
+        output += "#"+self.outputt.text()+"\n"+ "#"+self.packt.text()+"\n#"+str(self.processes.value())+"\n#"+str(self.worlds).replace("[","").replace("]","").replace("(","").replace(")","")+"\n#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","")+"\n \n"
+        for i, j in self.worlds:
+            output += 'worlds["'+i+'"] = "'+ j.replace("level.dat","") +'"\n'
+        for i, j, k, l, m, n, o in self.maps:
+            output += 'renders["'+str(i)+'"] = {\n    "world": "world'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'+str(l)+'",\n    "dimension": "'+str(k)+'",\n    "northdirection" : "'+str(m)+'",\n    "imgformat" : "'+str(n)+'",\n    "imgquality" : "'+str(o)+'",\n } \n \n'
+        output += 'outputdir = "'+str(self.outputt.text()).replace("\\","/")
+        if str(self.packt.text()).replace("","") != "":
+            output += '"\ntexturepath = "'+str(self.packt.text()).replace("\\","/")+'"'
+        f = open(str(self.filep).replace("\\","/"),"w")
+        f.write(output)
+        f.close()
 
 app = QtGui.QApplication(sys.argv)
 myWindow = Main()
