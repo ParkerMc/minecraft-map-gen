@@ -32,11 +32,14 @@
   <property name="animated">
    <bool>false</bool>
   </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>7</x>
       <y>0</y>
       <width>790</width>
       <height>511</height>
@@ -54,7 +57,7 @@
      </font>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="documentMode">
      <bool>false</bool>
@@ -406,7 +409,7 @@
       </item>
       <item row="1" column="5">
        <property name="text">
-        <string>Jpg</string>
+        <string>Png</string>
        </property>
       </item>
       <item row="1" column="6">
@@ -571,12 +574,13 @@
       </item>
      </widget>
      <zorder>rmoden</zorder>
-     <zorder>Maps</zorder>
      <zorder>World</zorder>
      <zorder>Dimension</zorder>
      <zorder>rmode</zorder>
      <zorder>nDir</zorder>
      <zorder>imgfor</zorder>
+     <zorder>output</zorder>
+     <zorder>Maps</zorder>
     </widget>
    </widget>
    <widget class="QCommandLinkButton" name="run">
@@ -592,6 +596,43 @@
      <string>Save and Run</string>
     </property>
    </widget>
+   <widget class="QTextBrowser" name="output">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>9</y>
+      <width>0</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QCommandLinkButton" name="cancel">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>530</y>
+      <width>0</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cancel</string>
+    </property>
+   </widget>
+   <zorder>output</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>run</zorder>
+   <zorder>cancel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -625,15 +666,10 @@
   </action>
   <action name="actionRun">
    <property name="text">
-    <string>Run</string>
+    <string>Save,Run</string>
    </property>
   </action>
   <action name="actionClose">
-   <property name="text">
-    <string>Close</string>
-   </property>
-  </action>
-  <action name="actionClose_3">
    <property name="text">
     <string>Close</string>
    </property>

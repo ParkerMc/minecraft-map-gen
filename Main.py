@@ -8,7 +8,7 @@
 # Copyright:   (c) ParkerMc 2016
 # Licence:     MIT
 #-------------------------------------------------------------------------------
-import sys, os
+import sys, os, subprocess
 from PyQt4 import QtCore, QtGui, uic
 global temp
 temp = 'plp'
@@ -19,7 +19,11 @@ class Main(QtGui.QMainWindow, form_class):
     def __init__(self, parent=None):
         self.lmr = 0
         self.worlds = []
+        self.worldnames = []
         self.maps = []
+        self.mapnames = []
+        self.backm = [[],[],[],[],[],[],[]]
+        self.backw = [[],[]]
         self.filep = ""
         global temp
         temp = self
@@ -29,6 +33,7 @@ class Main(QtGui.QMainWindow, form_class):
         self.packb.clicked.connect(self.packbf)
         self.actionOpen.triggered.connect(self.actionOpenf)
         self.actionSave.triggered.connect(self.save)
+        self.actionRun.triggered.connect(self.srun)
         self.Worlds.cellDoubleClicked.connect(self.path)
         self.Worlds.cellClicked.connect(self.path)
         self.Worlds.cellEntered.connect(self.path)
@@ -50,34 +55,81 @@ class Main(QtGui.QMainWindow, form_class):
         self.imgfor.currentIndexChanged.connect(self.imgforc)
         self.rmode.currentIndexChanged.connect(self.rmodec)
         self.rmoden.currentIndexChanged.connect(self.rmodenc)
+        self.run.clicked.connect(self.srun)
+        self.dump()
+
+    def dump(self):
+        self.backm = [[],[],[],[],[],[],[]]
+        self.backw = []
+        for i in range(1,self.Worlds.rowCount()):
+            try: self.backw.append(str(self.Worlds.item(i,0).text()))
+            except: self.backw.append("")
+            try: self.backw.append(str(self.Worlds.item(i,1).text()))
+            except: self.backw.append("")
+        for i in range(1,self.Maps.rowCount()-1):
+            try: self.backm[0].append((self.Maps.item(i,0).text()))
+            except: self.backm[0].append("")
+            try: self.backm[1].append(str(self.Maps.item(i,1).text()))
+            except: self.backm[1].append("")
+            try: self.backm[2].append(str(self.Maps.item(i,2).text()))
+            except: self.backm[2].append("")
+            try: self.backm[3].append(str(self.Maps.item(i,3).text()))
+            except: self.backm[3].append("")
+            try: self.backm[4].append(str(self.Maps.item(i,4).text()))
+            except: self.backm[4].append("")
+            try: self.backm[5].append(str(self.Maps.item(i,5).text()))
+            except: self.backm[5].append("")
+            try: self.backm[6].append(str(self.Maps.item(i,6).text()))
+            except: self.backm[6].append("")
+
+    def srun(self):
+        if self.save():
+            self.tabWidget.setFixedWidth(0)
+            self.run.setFixedWidth(0)
+            self.output.setFixedWidth(781)
+            self.cancel.setFixedWidth(91)
+            proc = subprocess.Popen("ping localhost -t", shell=True, stdout=subprocess.PIPE)
+            while True:
+                self.update()
+                line = proc.stdout.readline()
+                if line.strip() == "":
+                    pass
+                else:
+                    print line.strip()
+                if not line: break
+            proc.wait()
 
     def imgforc(self,a):
         self.imgfor.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.imgfor.itemText(a))
         self.Maps.setItem(self.lmr,5,item)
-        self.worldsgen()
+        self.mapsgen()
+        self.dump()
 
     def nDirc(self,a):
         self.nDir.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.nDir.itemText(a))
         self.Maps.setItem(self.lmr,4,item)
-        self.worldsgen()
+        self.mapsgen()
+        self.dump()
 
     def rmodec(self,a):
         self.rmode.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.rmode.itemText(a))
         self.Maps.setItem(self.lmr,3,item)
-        self.worldsgen()
+        self.mapsgen()
+        self.dump()
 
     def rmodenc(self,a):
         self.rmoden.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.rmoden.itemText(a))
         self.Maps.setItem(self.lmr,3,item)
-        self.worldsgen()
+        self.mapsgen()
+        self.dump()
 
     def Dimensionc(self,a):
         self.Dimension.setVisible(False)
@@ -89,17 +141,85 @@ class Main(QtGui.QMainWindow, form_class):
                 item = QtGui.QTableWidgetItem()
                 item.setText("Normal")
                 self.Maps.setItem(self.lmr,3,item)
-        self.worldsgen()
+        self.mapsgen()
+        self.dump()
 
     def worldc(self,a):
         self.World.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.World.itemText(a))
         self.Maps.setItem(self.lmr,1,item)
-        self.worldsgen()
+        self.mapsgen()
         self.newrowmap()
+        self.dump()
 
     def oncchangemap(self,a,b):
+        #XXX add go back if
+        good = True
+        if a > 0:
+            try:
+                if b==0 and self.Maps.item(a,0).text() in self.mapnames:
+                    self.warncell(a,0,"m0")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backm[0][a-1])
+                    self.Maps.setItem(a,0,item)
+            except: None
+
+            try:
+                if self.Maps.item(a,1).text() not in [""]+self.worldnames and b==1:
+                    self.warncell(a,1,"m1")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backm[1][a-1])
+                    self.Maps.setItem(a,1,item)
+
+            except: None
+
+            try:
+                if self.Maps.item(a,2).text() not in ["Overworld","Nether","End"] and b==2:
+                    self.warncell(a,2,"m2")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backm[2][a-1])
+                    self.Maps.setItem(a,2,item)
+
+            except: None
+
+            try:
+                if self.Maps.item(a,3).text() not in ["Normal","Lighting","Smooth Light","Night","Smooth Night","Cave"] and b==3 :
+                    self.warncell(a,3,"m3")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backm[3][a-1])
+                    self.Maps.setItem(a,3,item)
+
+            except: None
+
+            try:
+                if self.Maps.item(a,4).text() not in ["Upper Left","Upper Right","Lower Left","Lower Right"] and b== 4:
+                    self.warncell(a,4,"m4")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backm[4][a-1])
+                    self.Maps.setItem(a,4,item)
+
+            except: None
+
+            try:
+                if self.Maps.item(a,5).text() not in ["Png","Jpg","Jpeg"] and b==5:
+                    self.warncell(a,5,"m5")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backm[5][a-1])
+                    self.Maps.setItem(a,5,item)
+
+            except: None
+
+            try:
+                try:
+                    int(str(self.Maps.item(a,6).text()))
+                except AttributeError: None
+            except ValueError:
+                self.warncell(a,6,"m6")
+                item = QtGui.QTableWidgetItem()
+                item.setText(self.backm[6][a-1])
+                self.Maps.setItem(a,6,item)
+
         self.newrowmap()
         if a == 0:
             item = QtGui.QTableWidgetItem()
@@ -125,23 +245,47 @@ class Main(QtGui.QMainWindow, form_class):
                 item.setText("Image Quality")
                 self.Maps.setItem(0,6,item)
 
-        self.worldsgen()
+        self.mapsgen()
+        self.dump()
 
-    def worldsgen(self):
+    def mapsgen(self):
         self.maps = []
+        self.mapnames = []
         for i in range(1,self.Maps.rowCount()):
             try:
                 if str(self.Maps.item(i,0).text()).replace(" ","")!="" and str(self.Maps.item(i,1).text()).replace(" ","")!="":
                     self.maps.append((str(self.Maps.item(i,0).text()),str(self.Maps.item(i,1).text()),str(self.Maps.item(i,2).text()),str(self.Maps.item(i,3).text()),str(self.Maps.item(i,4).text()),str(self.Maps.item(i,5).text()),str(self.Maps.item(i,6).text())))
             except: None
+            try:
+                self.mapnames.append(str(self.Maps.item(i,0).text()))
+            except AttributeError: None
 
     def newrowmap(self):
+        newrow = False
         try:
-            if self.Maps.item(self.Maps.rowCount()-1,0).text().replace(" ","") != "":self.Maps.setRowCount(self.Maps.rowCount()+1)
+            if self.Maps.item(self.Maps.rowCount()-1,0).text().replace(" ","") != "":newrow = True
         except: None
         try:
-            if self.Maps.item(self.Maps.rowCount()-1,1).text().replace(" ","") != "":self.Maps.setRowCount(self.Maps.rowCount()+1)
+            if self.Maps.item(self.Maps.rowCount()-1,1).text().replace(" ","") != "":newrow = True
         except: None
+        if newrow:
+            self.Maps.setRowCount(self.Maps.rowCount()+1)
+            item = QtGui.QTableWidgetItem()
+            item.setText("Overworld")
+            self.Maps.setItem(self.Maps.rowCount()-1,2,item)
+            item = QtGui.QTableWidgetItem()
+            item.setText("Normal")
+            self.Maps.setItem(self.Maps.rowCount()-1,3,item)
+            item = QtGui.QTableWidgetItem()
+            item.setText("Upper Left")
+            self.Maps.setItem(self.Maps.rowCount()-1,4,item)
+            item = QtGui.QTableWidgetItem()
+            item.setText("Png")
+            self.Maps.setItem(self.Maps.rowCount()-1,5,item)
+            item = QtGui.QTableWidgetItem()
+            item.setText("95")
+            self.Maps.setItem(self.Maps.rowCount()-1,6,item)
+
         for i in range(1,self.Maps.rowCount()-2):
             removeroww = True
             try:
@@ -247,12 +391,14 @@ class Main(QtGui.QMainWindow, form_class):
                 self.imgfor.setVisible(True)
 
     def onchangeworld(self,a,b):
+        #XXX add go Back if
         self.worlds = []
-
+        self.worldnames = []
         for i in range(1,self.Worlds.rowCount()):
             try:
                 if str(self.Worlds.item(i,0).text()).replace(" ","")!="" and str(self.Worlds.item(i,1).text()).replace(" ","")!="":
                     self.worlds.append((str(self.Worlds.item(i,0).text()),str(self.Worlds.item(i,1).text())))
+                    self.worldnames.append(str(self.Worlds.item(i,0).text()))
             except: None
         try:
             if self.Worlds.item(self.Worlds.rowCount()-1,0).text().replace(" ","") != "":self.Worlds.setRowCount(self.Worlds.rowCount()+1)
@@ -280,22 +426,69 @@ class Main(QtGui.QMainWindow, form_class):
                 item2 = QtGui.QTableWidgetItem()
                 item2.setText("Path")
                 self.Worlds.setItem(0,1,item2)
+        self.dump()
 
     def path(self,a,b):
         if a > 0 and b == 1:
             back = ""
             item = QtGui.QTableWidgetItem()
+            dire = ""
             try:
-                item.setText(str(QtGui.QFileDialog.getOpenFileName(directory=self.Worlds.item(a,b).text(),filter="Minecraft World (level.dat)"))+"")
-                back = Worlds.item(a,b).text()
-            except:
+                dire = self.Worlds.item(a,b)
+            except: None
+            if dire == "":
+                item.setText(str(QtGui.QFileDialog.getOpenFileName(directory=dire.text(),filter="Minecraft World (level.dat)"))+"")
+            elif dire != "":
                 item.setText(str(QtGui.QFileDialog.getOpenFileName(filter="Minecraft World (level.dat)")))
-            if item.text() == "":
-                item.setText = back
             self.Worlds.setItem(a,b,item)
 
     def actionOpenf(self):
-        print QtGui.QFileDialog.getOpenFileName(filter="Config File (*.cfg)")
+        f = open(QtGui.QFileDialog.getOpenFileName(filter="Config File (*.cfg)"),"r")
+        while self.Maps.rowCount() > 2:
+            self.Maps.removeRow(self.Maps.rowCount()-1)
+        while self.Worlds.rowCount() > 2:
+            self.Worlds.removeRow(self.Worlds.rowCount()-1)
+        rawfile = f.readlines()
+        f.close()
+        self.outputt.setText(str(rawfile[2]).replace("#","").replace("\n",""))
+        self.packt.setText(str(rawfile[3]).replace("#","").replace("\n",""))
+        self.processes.setValue(int(str(rawfile[4]).replace("#","").replace("\n","")))
+        j = 0
+        k = 1
+        for i in str(rawfile[5]).replace("#","").replace("\n","").split(","):
+            item = QtGui.QTableWidgetItem()
+            item.setText(i)
+            self.Worlds.setItem(k,j,item)
+            if j >= 1:
+                j = -1
+                k += 1
+            j+=1
+        j = 0
+        k = 1
+        for i in str(rawfile[6]).replace("#","").replace("\n","").split(","):
+            item = QtGui.QTableWidgetItem()
+            item.setText(i)
+            self.Maps.setItem(k,j,item)
+            if j >= 6:
+                j = -1
+                k += 1
+            j+=1
+        item = QtGui.QTableWidgetItem()
+        item.setText("Overworld")
+        self.Maps.setItem(self.Maps.rowCount()-1,2,item)
+        item = QtGui.QTableWidgetItem()
+        item.setText("Normal")
+        self.Maps.setItem(self.Maps.rowCount()-1,3,item)
+        item = QtGui.QTableWidgetItem()
+        item.setText("Upper Left")
+        self.Maps.setItem(self.Maps.rowCount()-1,4,item)
+        item = QtGui.QTableWidgetItem()
+        item.setText("Png")
+        self.Maps.setItem(self.Maps.rowCount()-1,5,item)
+        item = QtGui.QTableWidgetItem()
+        item.setText("95")
+        self.Maps.setItem(self.Maps.rowCount()-1,6,item)
+        self.dump()
 
     def outputbf(self):
         self.outputt.setText(QtGui.QFileDialog.getExistingDirectory(directory=temp.outputt.text()))
@@ -304,20 +497,42 @@ class Main(QtGui.QMainWindow, form_class):
         self.packt.setText(QtGui.QFileDialog.getOpenFileName(directory=temp.packt.text(),filter="Texture Pack (*.zip; *.jar)"))
 
     def save(self):
+        if str(self.outputt.text()).replace(" ","") == "" or not os.path.exists(str(self.outputt.text())):
+            self.warn("You must provide a valid output path.")
+            return False
+        if str(self.Worlds.item(1,0).text()).replace(" ","")=="" or str(self.Worlds.item(1,1).text()).replace(" ","")=="":
+            self.warn("You must have at least 1 world.")
+            return False
+        if str(self.Maps.item(1,0).text()).replace(" ","")=="" or str(self.Maps.item(1,1).text()).replace(" ","")=="":
+            self.warn("You must have at least 1 map.")
+            return False
         if self.filep == "":
-            self.filep = QtGui.QFileDialog.getSaveFileName(filter="Config File (*.cfg)")
-        output = "#Made with a generator by ParkerMc\n"
-        output += "#"+self.outputt.text()+"\n"+ "#"+self.packt.text()+"\n#"+str(self.processes.value())+"\n#"+str(self.worlds).replace("[","").replace("]","").replace("(","").replace(")","")+"\n#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","")+"\n \n"
+            try:
+                self.filep = QtGui.QFileDialog.getSaveFileName(filter="Config File (*.cfg)")
+            except: return False
+        output = "#Made with a generator by ParkerMc\n####Do NOT edit####\n"
+        output += "#"+self.outputt.text()+"\n"+ "#"+self.packt.text()+"\n#"+str(self.processes.value())+"\n#"+str(self.worlds).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n \n"
         for i, j in self.worlds:
             output += 'worlds["'+i+'"] = "'+ j.replace("level.dat","") +'"\n'
         for i, j, k, l, m, n, o in self.maps:
-            output += 'renders["'+str(i)+'"] = {\n    "world": "world'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'+str(l)+'",\n    "dimension": "'+str(k)+'",\n    "northdirection" : "'+str(m)+'",\n    "imgformat" : "'+str(n)+'",\n    "imgquality" : "'+str(o)+'",\n } \n \n'
+            output += 'renders["'+str(i)+'"] = {\n    "world": "world'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'
+            if str(k) == "Nether":
+                output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting")
+            elif str(k) != "Nether":
+                output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting").replace("Night","night").replace("Smooth Night","smooth_night").replace("Cave","cave")
+
+            output += '",\n    "dimension": "'+str(k).replace("Overworld","overworld").replace("Nether","nether").replace("End","end")+'",\n    "northdirection" : "'+str(m).replace("Upper Left","upper-left").replace("Upper Right","upper-right").replace("Lower Left","lower-left").replace("Lower Right","lower-right")+'",\n    "imgformat" : "'+str(n).replace("Png","png").replace("Jpg","jpg").replace("Jpeg","jpeg")+'",\n    "imgquality" : "'+str(o)+'",\n } \n \n'
         output += 'outputdir = "'+str(self.outputt.text()).replace("\\","/")
         if str(self.packt.text()).replace("","") != "":
             output += '"\ntexturepath = "'+str(self.packt.text()).replace("\\","/")+'"'
         f = open(str(self.filep).replace("\\","/"),"w")
         f.write(output)
         f.close()
+        return True
+    def warncell(self, a, b, i):
+        print str(a)+"-"+str(b)+"-"+str(i)
+    def warn(self, i):
+        print i
 
 app = QtGui.QApplication(sys.argv)
 myWindow = Main()
