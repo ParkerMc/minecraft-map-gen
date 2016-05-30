@@ -10,8 +10,12 @@
 #-------------------------------------------------------------------------------
 import sys, os, subprocess
 from PyQt4 import QtCore, QtGui, uic
-global temp
-temp = 'plp'
+from PyQt4.QtCore import QThread, pyqtSignal
+
+f = open("os","r")
+global osc
+osc = f.readline()
+f.close()
 
 form_class = uic.loadUiType("ui/main.ui")[0]
 
@@ -24,11 +28,37 @@ class Main(QtGui.QMainWindow, form_class):
         self.mapnames = []
         self.backm = [[],[],[],[],[],[],[]]
         self.backw = [[],[]]
+        self.worldpaths = []
         self.filep = ""
-        global temp
-        temp = self
+        global sel
+        sel = self
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
+        self.world = QtGui.QComboBox()
+        self.Dimension = QtGui.QComboBox()
+        self.Dimension.addItem("Overworld")
+        self.Dimension.addItem("Nether")
+        self.Dimension.addItem("End")
+        self.rmode = QtGui.QComboBox()
+        self.rmode.addItem("Normal")
+        self.rmode.addItem("Lighting")
+        self.rmode.addItem("Smooth Light")
+        self.rmode.addItem("Night")
+        self.rmode.addItem("Smooth Night")
+        self.rmode.addItem("Cave")
+        self.rmoden = QtGui.QComboBox()
+        self.rmoden.addItem("Normal")
+        self.rmoden.addItem("Lighting")
+        self.rmoden.addItem("Smooth Light")
+        self.nDir = QtGui.QComboBox()
+        self.nDir.addItem("Upper Left")
+        self.nDir.addItem("Upper Right")
+        self.nDir.addItem("Lower Left")
+        self.nDir.addItem("Lower Right")
+        self.imgfor = QtGui.QComboBox()
+        self.imgfor.addItem("Png")
+        self.imgfor.addItem("Jpg")
+        self.imgfor.addItem("Jpeg")
         self.outputb.clicked.connect(self.outputbf)
         self.packb.clicked.connect(self.packbf)
         self.actionOpen.triggered.connect(self.actionOpenf)
@@ -43,13 +73,6 @@ class Main(QtGui.QMainWindow, form_class):
         self.Maps.cellClicked.connect(self.onchangemap)
         self.Maps.cellEntered.connect(self.onchangemap)
         self.Maps.cellDoubleClicked.connect(self.onchangemap)
-        self.imgfor.setVisible(False)
-        self.Dimension.setVisible(False)
-        self.World.setVisible(False)
-        self.rmode.setVisible(False)
-        self.rmoden.setVisible(False)
-        self.nDir.setVisible(False)
-        self.World.currentIndexChanged.connect(self.worldc)
         self.Dimension.currentIndexChanged.connect(self.Dimensionc)
         self.nDir.currentIndexChanged.connect(self.nDirc)
         self.imgfor.currentIndexChanged.connect(self.imgforc)
@@ -60,12 +83,12 @@ class Main(QtGui.QMainWindow, form_class):
 
     def dump(self):
         self.backm = [[],[],[],[],[],[],[]]
-        self.backw = []
+        self.backw = [[],[]]
         for i in range(1,self.Worlds.rowCount()):
-            try: self.backw.append(str(self.Worlds.item(i,0).text()))
-            except: self.backw.append("")
-            try: self.backw.append(str(self.Worlds.item(i,1).text()))
-            except: self.backw.append("")
+            try: self.backw[0].append(str(self.Worlds.item(i,0).text()))
+            except: self.backw[0].append("")
+            try: self.backw[1].append(str(self.Worlds.item(i,1).text()))
+            except: self.backw[1].append("")
         for i in range(1,self.Maps.rowCount()-1):
             try: self.backm[0].append((self.Maps.item(i,0).text()))
             except: self.backm[0].append("")
@@ -84,55 +107,51 @@ class Main(QtGui.QMainWindow, form_class):
 
     def srun(self):
         if self.save():
+            global fileo
+            fileo = self.filep
+            run()
             self.tabWidget.setFixedWidth(0)
             self.run.setFixedWidth(0)
             self.output.setFixedWidth(781)
             self.cancel.setFixedWidth(91)
-            proc = subprocess.Popen("ping localhost -t", shell=True, stdout=subprocess.PIPE)
-            while True:
-                self.update()
-                line = proc.stdout.readline()
-                if line.strip() == "":
-                    pass
-                else:
-                    print line.strip()
-                if not line: break
-            proc.wait()
 
     def imgforc(self,a):
-        self.imgfor.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.imgfor.itemText(a))
         self.Maps.setItem(self.lmr,5,item)
+        self.Maps.removeCellWidget(self.lmr,5)
+        self.imgfor = QtGui.QComboBox()
         self.mapsgen()
         self.dump()
 
     def nDirc(self,a):
-        self.nDir.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.nDir.itemText(a))
         self.Maps.setItem(self.lmr,4,item)
+        self.Maps.removeCellWidget(self.lmr,4)
+        self.nDir = QtGui.QComboBox()
         self.mapsgen()
         self.dump()
 
     def rmodec(self,a):
-        self.rmode.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.rmode.itemText(a))
         self.Maps.setItem(self.lmr,3,item)
+        self.Maps.removeCellWidget(self.lmr,3)
+        self.rmode = QtGui.QComboBox()
         self.mapsgen()
         self.dump()
 
     def rmodenc(self,a):
-        self.rmoden.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.rmoden.itemText(a))
         self.Maps.setItem(self.lmr,3,item)
+        self.Maps.removeCellWidget(self.lmr,3)
+        self.rmoden = QtGui.QComboBox()
         self.mapsgen()
         self.dump()
 
     def Dimensionc(self,a):
-        self.Dimension.setVisible(False)
         item = QtGui.QTableWidgetItem()
         item.setText(self.Dimension.itemText(a))
         self.Maps.setItem(self.lmr,2,item)
@@ -141,22 +160,26 @@ class Main(QtGui.QMainWindow, form_class):
                 item = QtGui.QTableWidgetItem()
                 item.setText("Normal")
                 self.Maps.setItem(self.lmr,3,item)
+        self.Maps.removeCellWidget(self.lmr,2)
+        self.Dimension = QtGui.QComboBox()
         self.mapsgen()
         self.dump()
 
     def worldc(self,a):
-        self.World.setVisible(False)
         item = QtGui.QTableWidgetItem()
-        item.setText(self.World.itemText(a))
+        item.setText(self.world.itemText(a))
+        self.Maps.removeCellWidget(self.lmr,1)
         self.Maps.setItem(self.lmr,1,item)
+        self.world  = QtGui.QComboBox()
+        self.world.currentIndexChanged.connect(self.worldc)
         self.mapsgen()
         self.newrowmap()
         self.dump()
 
     def oncchangemap(self,a,b):
-        #XXX add go back if
         good = True
         if a > 0:
+            #if True:
             try:
                 if b==0 and self.Maps.item(a,0).text() in self.mapnames:
                     self.warncell(a,0,"m0")
@@ -298,30 +321,31 @@ class Main(QtGui.QMainWindow, form_class):
                 self.Maps.removeRow(i)
 
     def onchangemap(self,a,b,c=0,d=0):
+        self.Maps.removeCellWidget(c,d)
         self.lmr = a
-        self.imgfor.setVisible(False)
-        self.Dimension.setVisible(False)
-        self.World.setVisible(False)
-        self.rmode.setVisible(False)
-        self.rmoden.setVisible(False)
-        self.nDir.setVisible(False)
         if a != 0:
             if b == 1:
+                self.world = QtGui.QComboBox()
                 preworld = ""
                 try:
                     preworld = self.Maps.item(a,1).text()
                 except: None
-                self.World.clear()
-                self.World.addItem("")
+                self.world.addItem("")
                 for i, j in self.worlds:
-                    self.World.addItem(i)
+                    self.world.addItem(i)
                 k = 1
                 for i, j in self.worlds:
                     if str(i) == preworld:
-                        self.World.setCurrentIndex(k)
+                        self.world.setCurrentIndex(k)
                     k+=1
-                self.World.setVisible(True)
+                self.Maps.setCellWidget(a,b,self.world)
+                self.world.currentIndexChanged.connect(self.worldc)
+                self.world.showPopup()
             if b == 2:
+                self.Dimension = QtGui.QComboBox()
+                self.Dimension.addItem("Overworld")
+                self.Dimension.addItem("Nether")
+                self.Dimension.addItem("End")
                 preDimension = ""
                 try:
                     preDimension = self.Maps.item(a,2).text()
@@ -332,7 +356,9 @@ class Main(QtGui.QMainWindow, form_class):
                     self.Dimension.setCurrentIndex(1)
                 if "End" == preDimension:
                     self.Dimension.setCurrentIndex(2)
-                self.Dimension.setVisible(True)
+                self.Maps.setCellWidget(a,b,self.Dimension)
+                self.Dimension.currentIndexChanged.connect(self.Dimensionc)
+                self.Dimension.showPopup()
 
             if b == 3:
                 prermode = ""
@@ -340,14 +366,27 @@ class Main(QtGui.QMainWindow, form_class):
                     prermode = self.Maps.item(a,3).text()
                 except: None
                 if self.Maps.item(a,2).text() == "Nether":
+                    self.rmoden = QtGui.QComboBox()
+                    self.rmoden.addItem("Normal")
+                    self.rmoden.addItem("Lighting")
+                    self.rmoden.addItem("Smooth Light")
                     if "Normal" == prermode:
                         self.rmoden.setCurrentIndex(0)
                     if "Lighting" == prermode:
                         self.rmoden.setCurrentIndex(1)
                     if "Smooth Light" == prermode:
                         self.rmoden.setCurrentIndex(2)
-                    self.rmoden.setVisible(True)
+                    self.Maps.setCellWidget(a,b,self.rmoden)
+                    self.rmoden.currentIndexChanged.connect(self.rmodenc)
+                    self.rmoden.showPopup()
                 elif self.Maps.item(a,2).text() != "Nether":
+                    self.rmode = QtGui.QComboBox()
+                    self.rmode.addItem("Normal")
+                    self.rmode.addItem("Lighting")
+                    self.rmode.addItem("Smooth Light")
+                    self.rmode.addItem("Night")
+                    self.rmode.addItem("Smooth Night")
+                    self.rmode.addItem("Cave")
                     if "Normal" == prermode:
                         self.rmode.setCurrentIndex(0)
                     if "Lighting" == prermode:
@@ -360,9 +399,16 @@ class Main(QtGui.QMainWindow, form_class):
                         self.rmode.setCurrentIndex(4)
                     if "Cave" == prermode:
                         self.rmode.setCurrentIndex(5)
-                    self.rmode.setVisible(True)
+                    self.Maps.setCellWidget(a,b,self.rmode)
+                    self.rmode.currentIndexChanged.connect(self.rmodec)
+                    self.rmode.showPopup()
 
             if b == 4:
+                self.nDir = QtGui.QComboBox()
+                self.nDir.addItem("Upper Left")
+                self.nDir.addItem("Upper Right")
+                self.nDir.addItem("Lower Left")
+                self.nDir.addItem("Lower Right")
                 prenDir = ""
                 try:
                     prenDir = self.Maps.item(a,4).text()
@@ -375,10 +421,16 @@ class Main(QtGui.QMainWindow, form_class):
                     self.nDir.setCurrentIndex(2)
                 if "Lower Right" == prenDir:
                     self.nDir.setCurrentIndex(3)
-                self.nDir.setVisible(True)
+                self.Maps.setCellWidget(a,b,self.nDir)
+                self.nDir.currentIndexChanged.connect(self.nDirc)
+                self.nDir.showPopup()
 
             if b == 5:
                 preimgfor = ""
+                self.imgfor = QtGui.QComboBox()
+                self.imgfor.addItem("Png")
+                self.imgfor.addItem("Jpg")
+                self.imgfor.addItem("Jpeg")
                 try:
                     preimgfor = self.Maps.item(a,5).text()
                 except: None
@@ -388,17 +440,37 @@ class Main(QtGui.QMainWindow, form_class):
                     self.imgfor.setCurrentIndex(1)
                 if "Jpeg" == preimgfor:
                     self.imgfor.setCurrentIndex(2)
-                self.imgfor.setVisible(True)
+                self.Maps.setCellWidget(a,b,self.imgfor)
+                self.imgfor.currentIndexChanged.connect(self.imgforc)
+                self.imgfor.showPopup()
 
     def onchangeworld(self,a,b):
-        #XXX add go Back if
+        if a > 0:
+            try:
+                if b==0 and self.Worlds.item(a,0).text() in self.worldnames:
+                    self.warncell(a,0,"w0")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backw[0][a-1])
+                    self.Words.setItem(a,0,item)
+            except: None
+
+            try:
+                if b==0 and self.Worlds.item(a,1).text() in self.worldpaths or os.path.exists(self.Worlds.item(a,1).text()) != True:
+                    self.warncell(a,1,"w1")
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(self.backw[1][a-1])
+                    self.Words.setItem(a,1,item)
+            except: None
+
         self.worlds = []
         self.worldnames = []
+        self.worldpaths = []
         for i in range(1,self.Worlds.rowCount()):
             try:
                 if str(self.Worlds.item(i,0).text()).replace(" ","")!="" and str(self.Worlds.item(i,1).text()).replace(" ","")!="":
                     self.worlds.append((str(self.Worlds.item(i,0).text()),str(self.Worlds.item(i,1).text())))
                     self.worldnames.append(str(self.Worlds.item(i,0).text()))
+                    self.worldpaths.append(str(self.Worlds.item(i,1).text()))
             except: None
         try:
             if self.Worlds.item(self.Worlds.rowCount()-1,0).text().replace(" ","") != "":self.Worlds.setRowCount(self.Worlds.rowCount()+1)
@@ -443,21 +515,22 @@ class Main(QtGui.QMainWindow, form_class):
             self.Worlds.setItem(a,b,item)
 
     def actionOpenf(self):
-        f = open(QtGui.QFileDialog.getOpenFileName(filter="Config File (*.cfg)"),"r")
+        ofile = QtGui.QFileDialog.getOpenFileName(filter="Config File (*.cfg)")
+        f = open(ofile,"r")
         while self.Maps.rowCount() > 2:
             self.Maps.removeRow(self.Maps.rowCount()-1)
         while self.Worlds.rowCount() > 2:
             self.Worlds.removeRow(self.Worlds.rowCount()-1)
         rawfile = f.readlines()
         f.close()
-        self.outputt.setText(str(rawfile[2]).replace("#","").replace("\n",""))
-        self.packt.setText(str(rawfile[3]).replace("#","").replace("\n",""))
-        self.processes.setValue(int(str(rawfile[4]).replace("#","").replace("\n","")))
+        self.outputt.setText(str(rawfile[2]).replace("#","").replace("\n","").strip())
+        self.packt.setText(str(rawfile[3]).replace("#","").replace("\n","").strip())
+        self.processes.setValue(int(str(rawfile[4]).replace("#","").replace("\n","").strip()))
         j = 0
         k = 1
         for i in str(rawfile[5]).replace("#","").replace("\n","").split(","):
             item = QtGui.QTableWidgetItem()
-            item.setText(i)
+            item.setText(i.strip())
             self.Worlds.setItem(k,j,item)
             if j >= 1:
                 j = -1
@@ -467,7 +540,7 @@ class Main(QtGui.QMainWindow, form_class):
         k = 1
         for i in str(rawfile[6]).replace("#","").replace("\n","").split(","):
             item = QtGui.QTableWidgetItem()
-            item.setText(i)
+            item.setText(i.strip())
             self.Maps.setItem(k,j,item)
             if j >= 6:
                 j = -1
@@ -489,12 +562,13 @@ class Main(QtGui.QMainWindow, form_class):
         item.setText("95")
         self.Maps.setItem(self.Maps.rowCount()-1,6,item)
         self.dump()
+        self.filep = ofile
 
     def outputbf(self):
-        self.outputt.setText(QtGui.QFileDialog.getExistingDirectory(directory=temp.outputt.text()))
+        self.outputt.setText(QtGui.QFileDialog.getExistingDirectory(directory=self.outputt.text()))
 
     def packbf(self):
-        self.packt.setText(QtGui.QFileDialog.getOpenFileName(directory=temp.packt.text(),filter="Texture Pack (*.zip; *.jar)"))
+        self.packt.setText(QtGui.QFileDialog.getOpenFileName(directory=self.packt.text(),filter="Texture Pack (*.zip; *.jar)"))
 
     def save(self):
         if str(self.outputt.text()).replace(" ","") == "" or not os.path.exists(str(self.outputt.text())):
@@ -513,16 +587,16 @@ class Main(QtGui.QMainWindow, form_class):
         output = "#Made with a generator by ParkerMc\n####Do NOT edit####\n"
         output += "#"+self.outputt.text()+"\n"+ "#"+self.packt.text()+"\n#"+str(self.processes.value())+"\n#"+str(self.worlds).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n \n"
         for i, j in self.worlds:
-            output += 'worlds["'+i+'"] = "'+ j.replace("level.dat","") +'"\n'
+            output += 'worlds["world_'+i+'"] = "'+ j.replace("level.dat","") +'"\n'
         for i, j, k, l, m, n, o in self.maps:
-            output += 'renders["'+str(i)+'"] = {\n    "world": "world'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'
+            output += 'renders["'+str(i)+'"] = {\n    "world": "world_'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'
             if str(k) == "Nether":
                 output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting")
             elif str(k) != "Nether":
                 output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting").replace("Night","night").replace("Smooth Night","smooth_night").replace("Cave","cave")
 
             output += '",\n    "dimension": "'+str(k).replace("Overworld","overworld").replace("Nether","nether").replace("End","end")+'",\n    "northdirection" : "'+str(m).replace("Upper Left","upper-left").replace("Upper Right","upper-right").replace("Lower Left","lower-left").replace("Lower Right","lower-right")+'",\n    "imgformat" : "'+str(n).replace("Png","png").replace("Jpg","jpg").replace("Jpeg","jpeg")+'",\n    "imgquality" : "'+str(o)+'",\n } \n \n'
-        output += 'outputdir = "'+str(self.outputt.text()).replace("\\","/")
+        output += 'outputdir = "'+str(self.outputt.text()).replace("\\","/")+'"'
         if str(self.packt.text()).replace("","") != "":
             output += '"\ntexturepath = "'+str(self.packt.text()).replace("\\","/")+'"'
         f = open(str(self.filep).replace("\\","/"),"w")
@@ -534,7 +608,65 @@ class Main(QtGui.QMainWindow, form_class):
     def warn(self, i):
         print i
 
-app = QtGui.QApplication(sys.argv)
-myWindow = Main()
-myWindow.show()
-app.exec_()
+    def closeEvent(self, event):
+        stopn()
+##        if can_exit:
+##            event.accept() # let the window close
+##        else:
+##            event.ignore()
+
+
+class Worker(QThread):
+
+    def go(self):
+        self.go = True
+
+    def run(self):
+        self.go = False
+        global go
+        global sel
+        while go == False:
+            None
+        global osc
+        global fileo
+        global stop
+        if not stop:
+            if osc == "win32":
+                proc = subprocess.Popen("32bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                print "32bit\\overviewer.exe --config="+fileo
+            if osc == "win64":
+                proc = subprocess.Popen("64bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+            if osc == "linux":
+                proc = subprocess.Popen("./linux/overviewer.py --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+            while True:
+                line = proc.stdout.readline()
+                if line.strip() == "":
+                    pass
+                else:
+                    print line.strip()
+                    sel.output.append(line.strip())
+                if not line: break
+                if stop: break
+            proc.wait()
+
+def slot(arg='finished'): print(arg)
+thread = Worker()
+thread.start()
+global stop
+stop = False
+global go
+go = False
+def run():
+    global go
+    go = True
+def stopn():
+    global stop
+    run()
+    stop = True
+##
+##app = QtGui.QApplication(sys.argv)
+##myWindow = Main()
+##myWindow.show()
+##app.exec_()
+##thread.terminate()
+
