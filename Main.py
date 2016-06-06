@@ -610,7 +610,7 @@ class Main(QtGui.QMainWindow, form_class):
             output += '",\n    "dimension": "'+str(k).replace("Overworld","overworld").replace("Nether","nether").replace("End","end")+'",\n    "northdirection" : "'+str(m).replace("Upper Left","upper-left").replace("Upper Right","upper-right").replace("Lower Left","lower-left").replace("Lower Right","lower-right")+'",\n    "imgformat" : "'+str(n).replace("Png","png").replace("Jpg","jpg").replace("Jpeg","jpeg")+'",\n    "imgquality" : "'+str(o)+'",\n } \n \n'
         output += 'outputdir = "'+str(self.outputt.text()).replace("\\","/")+'"'
         if str(self.packt.text()).replace("","") != "":
-            output += '"\ntexturepath = "'+str(self.packt.text()).replace("\\","/")+'"'
+            output += '\ntexturepath = "'+str(self.packt.text()).replace("\\","/")+'"'
         f = open(str(self.filep).replace("\\","/"),"w")
         f.write(output)
         f.close()
