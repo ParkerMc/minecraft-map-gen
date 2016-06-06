@@ -8,7 +8,7 @@
 # Copyright:   (c) ParkerMc 2016
 # Licence:     MIT
 #-------------------------------------------------------------------------------
-import sys, os, subprocess
+import sys, os, subprocess, platform
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.QtCore import QThread, pyqtSignal
 
@@ -648,7 +648,7 @@ class Worker(QThread):
                 print "32bit\\overviewer.exe --config="+fileo
             if osc == "win64":
                 proc = subprocess.Popen("64bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
-            if osc == "linux":
+            if platform.system() == "Linux":
                 proc = subprocess.Popen("./linux/overviewer.py --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
             while True:
                 line = proc.stdout.readline()
