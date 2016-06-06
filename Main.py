@@ -571,13 +571,25 @@ class Main(QtGui.QMainWindow, form_class):
         self.packt.setText(QtGui.QFileDialog.getOpenFileName(directory=self.packt.text(),filter="Texture Pack (*.zip; *.jar)"))
 
     def save(self):
-        if str(self.outputt.text()).replace(" ","") == "" or not os.path.exists(str(self.outputt.text())):
+        try:
+            if str(self.outputt.text()).replace(" ","") == "" or not os.path.exists(str(self.outputt.text())):
+                self.warn("You must provide a valid output path.")
+                return False
+        except:
             self.warn("You must provide a valid output path.")
             return False
-        if str(self.Worlds.item(1,0).text()).replace(" ","")=="" or str(self.Worlds.item(1,1).text()).replace(" ","")=="":
+        try:
+            if str(self.Worlds.item(1,0).text()).replace(" ","")=="" or str(self.Worlds.item(1,1).text()).replace(" ","")=="":
+                self.warn("You must have at least 1 world.")
+                return False
+        except:
             self.warn("You must have at least 1 world.")
             return False
-        if str(self.Maps.item(1,0).text()).replace(" ","")=="" or str(self.Maps.item(1,1).text()).replace(" ","")=="":
+        try:
+            if str(self.Maps.item(1,0).text()).replace(" ","")=="" or str(self.Maps.item(1,1).text()).replace(" ","")=="":
+                self.warn("You must have at least 1 map.")
+                return False
+        except:
             self.warn("You must have at least 1 map.")
             return False
         if self.filep == "":
