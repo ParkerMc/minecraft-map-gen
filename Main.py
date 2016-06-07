@@ -649,7 +649,7 @@ class Worker(QThread):
             if osc == "win64":
                 proc = subprocess.Popen("64bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
             if platform.system() == "Linux":
-                proc = subprocess.Popen("./linux/overviewer.py --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                proc = subprocess.Popen("overviewer --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
             while True:
                 line = proc.stdout.readline()
                 if line.strip() == "":
