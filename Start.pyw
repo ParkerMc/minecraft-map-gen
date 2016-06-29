@@ -9,18 +9,16 @@
 # Licence:     MIT
 #-------------------------------------------------------------------------------
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-import Main, sip
+from PyQt4 import QtCore, QtGui
+import Main, sys, time
 
 if __name__ == "__main__":
-    import sys, time
 
-    app = QApplication(sys.argv)
+    app = QtGui.QApplication(sys.argv)
 
     # Create and display the splash screen
-    splash_pix = QPixmap('assets/splach.png')
-    splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
+    splash_pix = QtGui.QPixmap('assets/splach.png')
+    splash = QtGui.QSplashScreen(splash_pix, QtCore.Qt.WindowStaysOnTopHint)
     splash.setMask(splash_pix.mask())
     splash.show()
     app.processEvents()
