@@ -59,19 +59,22 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>65</x>
+     <x>5</x>
      <y>15</y>
-     <width>181</width>
+     <width>291</width>
      <height>20</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>10</pointsize>
+     <pointsize>11</pointsize>
     </font>
    </property>
    <property name="text">
     <string>Do you want to save changes?</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>
@@ -101,6 +104,22 @@
    <hints>
     <hint type="sourcelabel">
      <x>152</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>152</x>
+     <y>41</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>can</sender>
+   <signal>clicked()</signal>
+   <receiver>Close</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
      <y>61</y>
     </hint>
     <hint type="destinationlabel">
