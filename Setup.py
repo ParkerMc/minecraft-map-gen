@@ -15,7 +15,7 @@ var = "0.12.109"
 windows32 = "https://overviewer.org/builds/win32/8/overviewer-0.12.109.zip"
 windows64 = "https://overviewer.org/builds/win64/7/overviewer-0.12.109.zip"
 #-------------------------------------------------------------------------------
-import urllib, zipfile, tarfile, os, shutil;
+import urllib, zipfile, os, shutil;
 cwd = os.getcwd()
 
 def main():
