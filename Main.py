@@ -9,18 +9,43 @@
 # Licence:     MIT
 #-------------------------------------------------------------------------------
 import sys, os, subprocess, platform
-from PyQt4 import QtCore, QtGui, uic
-from PyQt4.QtCore import QThread, pyqtSignal
+from PyQt4 import QtGui, uic
+from PyQt4.QtCore import QThread
 
-f = open("os","r")
-global osc
-osc = f.readline()
-f.close()
+warn_class = uic.loadUiType("ui/warn.ui")[0]
+save_class = uic.loadUiType("ui/close.ui")[0]
+
+class warn(QtGui.QDialog, warn_class):
+    def __init__(self, warningmsg, parent=None):
+        QtGui.QDialog.__init__(self, parent)
+        self.setupUi(self)
+        self.label.setText(warningmsg)
+
+class save(QtGui.QDialog, save_class):
+    def __init__(self, se, parent=None):
+        QtGui.QDialog.__init__(self, parent)
+        self.se = se
+        self.setupUi(self)
+        self.can.clicked.connect(self.canf)
+        self.no.clicked.connect(self.nof)
+        self.yes.clicked.connect(self.yesf)
+
+    def canf(self):
+        self.close()
+
+    def nof(self):
+        self.se.forceClose = True
+
+    def yesf(self):
+        self.se.save()
+        self.se.forceClose = True
+
 
 form_class = uic.loadUiType("ui/main.ui")[0]
 
 class Main(QtGui.QMainWindow, form_class):
     def __init__(self, parent=None):
+        self.forceClose = False
         self.lmr = 0
         self.worlds = []
         self.worldnames = []
@@ -106,14 +131,34 @@ class Main(QtGui.QMainWindow, form_class):
             except: self.backm[6].append("")
 
     def srun(self):
-        if self.save():
-            global fileo
-            fileo = self.filep
-            run()
-            self.tabWidget.setFixedWidth(0)
-            self.run.setFixedWidth(0)
-            self.output.setFixedWidth(781)
-            self.cancel.setFixedWidth(91)
+        try:
+            if str(self.outputt.text()).replace(" ","") == "" or not os.path.exists(str(self.outputt.text())):
+                self.warn("You must provide a valid output path.")
+                return False
+        except:
+            self.warn("You must provide a valid output path.")
+            return False
+        try:
+            if str(self.Worlds.item(1,0).text()).replace(" ","")=="" or str(self.Worlds.item(1,1).text()).replace(" ","")=="":
+                self.warn("You must have at least 1 world.")
+                return False
+        except:
+            self.warn("You must have at least 1 world.")
+            return False
+        try:
+            if str(self.Maps.item(1,0).text()).replace(" ","")=="" or str(self.Maps.item(1,1).text()).replace(" ","")=="":
+                self.warn("You must have at least 1 map.")
+                return False
+        except:
+            self.warn("You must have at least 1 map.")
+            return False
+        global fileo
+        fileo = self.filep
+        run()
+        self.tabWidget.setFixedWidth(0)
+        self.run.setFixedWidth(0)
+        self.output.setFixedWidth(781)
+        self.cancel.setFixedWidth(91)
 
     def imgforc(self,a):
         item = QtGui.QTableWidgetItem()
@@ -177,7 +222,6 @@ class Main(QtGui.QMainWindow, form_class):
         self.dump()
 
     def oncchangemap(self,a,b):
-        good = True
         if a > 0:
             #if True:
             try:
@@ -502,7 +546,6 @@ class Main(QtGui.QMainWindow, form_class):
 
     def path(self,a,b):
         if a > 0 and b == 1:
-            back = ""
             item = QtGui.QTableWidgetItem()
             dire = ""
             try:
@@ -516,7 +559,9 @@ class Main(QtGui.QMainWindow, form_class):
 
     def actionOpenf(self):
         ofile = QtGui.QFileDialog.getOpenFileName(filter="Config File (*.cfg)")
-        f = open(ofile,"r")
+        try:
+            f = open(ofile,"r")
+        except: return
         while self.Maps.rowCount() > 2:
             self.Maps.removeRow(self.Maps.rowCount()-1)
         while self.Worlds.rowCount() > 2:
@@ -569,33 +614,8 @@ class Main(QtGui.QMainWindow, form_class):
 
     def packbf(self):
         self.packt.setText(QtGui.QFileDialog.getOpenFileName(directory=self.packt.text(),filter="Texture Pack (*.zip; *.jar)"))
-
-    def save(self):
-        try:
-            if str(self.outputt.text()).replace(" ","") == "" or not os.path.exists(str(self.outputt.text())):
-                self.warn("You must provide a valid output path.")
-                return False
-        except:
-            self.warn("You must provide a valid output path.")
-            return False
-        try:
-            if str(self.Worlds.item(1,0).text()).replace(" ","")=="" or str(self.Worlds.item(1,1).text()).replace(" ","")=="":
-                self.warn("You must have at least 1 world.")
-                return False
-        except:
-            self.warn("You must have at least 1 world.")
-            return False
-        try:
-            if str(self.Maps.item(1,0).text()).replace(" ","")=="" or str(self.Maps.item(1,1).text()).replace(" ","")=="":
-                self.warn("You must have at least 1 map.")
-                return False
-        except:
-            self.warn("You must have at least 1 map.")
-            return False
-        if self.filep == "":
-            try:
-                self.filep = QtGui.QFileDialog.getSaveFileName(filter="Config File (*.cfg)")
-            except: return False
+    
+    def genOut(self):
         output = "#Made with a generator by ParkerMc\n####Do NOT edit####\n"
         output += "#"+self.outputt.text()+"\n"+ "#"+self.packt.text()+"\n#"+str(self.processes.value())+"\n#"+str(self.worlds).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n \n"
         for i, j in self.worlds:
@@ -611,6 +631,14 @@ class Main(QtGui.QMainWindow, form_class):
         output += 'outputdir = "'+str(self.outputt.text()).replace("\\","/")+'"'
         if str(self.packt.text()).replace("","") != "":
             output += '\ntexturepath = "'+str(self.packt.text()).replace("\\","/")+'"'
+        return output
+
+    def save(self):
+        if self.filep == "":
+            try:
+                self.filep = QtGui.QFileDialog.getSaveFileName(filter="Config File (*.cfg)")
+            except: return False
+        output = self.genOut()
         f = open(str(self.filep).replace("\\","/"),"w")
         f.write(output)
         f.close()
@@ -618,14 +646,30 @@ class Main(QtGui.QMainWindow, form_class):
     def warncell(self, a, b, i):
         print str(a)+"-"+str(b)+"-"+str(i)
     def warn(self, i):
-        print i
+        self.wdialog = warn(i)
+        self.wdialog.exec_()
+        
 
     def closeEvent(self, event):
-        stopn()
-##        if can_exit:
-##            event.accept() # let the window close
-##        else:
-##            event.ignore()
+        closen = True
+        if self.filep == "":
+        	if str(self.outputt.text()).strip() != "" or str(self.packt.text()).strip() != "" or str(self.processes.value()).strip() != "1" or len(self.worlds) != 0 or len(self.maps) != 0:
+        		closen = False
+        else:
+            f = open(self.filep,"r")
+            lines = f.readlines()
+            f.close()
+            "\n#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n \n"
+            if lines[2].strip() != "#"+str(self.outputt.text()).strip() or lines[3].strip() != "#"+str(self.packt.text()).strip() or lines[4].strip() != "#"+str(self.processes.value()).strip() or lines[5].strip() != "#"+str(self.worlds).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","").strip() or lines[6].strip() != "#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","").strip():
+                closen = False
+            
+        if closen:
+            stopn()
+        else:
+            self.sdialog = save(self)
+            self.sdialog.exec_()
+            if not self.forceClose:
+                event.ignore()
 
 
 class Worker(QThread):
@@ -639,17 +683,16 @@ class Worker(QThread):
         global sel
         while go == False:
             None
-        global osc
         global fileo
         global stop
         if not stop:
-            if osc == "win32":
+            if platform.system() == "Windows" and platform.architecture() == "32Bit":
                 proc = subprocess.Popen("32bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
                 print "32bit\\overviewer.exe --config="+fileo
-            if osc == "win64":
+            if platform.system() == "Windows" and platform.architecture() == "64Bit":
                 proc = subprocess.Popen("64bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
             if platform.system() == "Linux":
-                proc = subprocess.Popen("overviewer --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                proc = subprocess.Popen("overviewer.py --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
             while True:
                 line = proc.stdout.readline()
                 if line.strip() == "":
@@ -675,10 +718,9 @@ def stopn():
     global stop
     run()
     stop = True
-##
-##app = QtGui.QApplication(sys.argv)
-##myWindow = Main()
-##myWindow.show()
-##app.exec_()
-##thread.terminate()
-
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    myWindow = Main()
+    myWindow.show()
+    app.exec_()
+    thread.terminate()
