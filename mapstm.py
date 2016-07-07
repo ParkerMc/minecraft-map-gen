@@ -8,6 +8,8 @@
 # Copyright:   (c) ParkerMc 2016
 # Licence:     MIT
 #-------------------------------------------------------------------------------
+import error, sys
+sys.excepthook = error.excepthook
 from PyQt4 import QtGui, uic
 
 def imgforc(self,a):

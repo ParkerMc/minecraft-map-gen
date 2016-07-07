@@ -8,6 +8,8 @@
 # Copyright:   (c) ParkerMc 2016
 # Licence:     MIT
 #-------------------------------------------------------------------------------
+import error, sys
+sys.excepthook = error.excepthook
 from PyQt4 import QtGui, uic
 
 warn_class = uic.loadUiType("ui/warn.ui")[0]

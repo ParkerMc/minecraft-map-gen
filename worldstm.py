@@ -8,6 +8,8 @@
 # Copyright:   (c) ParkerMc 2016
 # Licence:     MIT
 #-------------------------------------------------------------------------------
+import error, sys
+sys.excepthook = error.excepthook
 from PyQt4 import QtGui, QtCore, uic
 def onchangeworld(self,a,b):
     if a > 0:

@@ -46,7 +46,7 @@ class error(QtGui.QDialog, error_class):
     def sende(self):
         print """http://parkermc.bugs3.com/report_bug?de=%s&emsg=%s"""%(self.de.toPlainText(),self.msg)
         try:
-            urllib.urlretrieve("""https://script.google.com/macros/s/AKfycbw0nerGGY1Q0KePlvRGMceROW948Gi1dQtr9G81lpSHueK2ofs/exec?email=%s&de=%s&msg=%s"""%("email",self.de.toPlainText(),self.msg),"temp.html")
+            urllib.urlretrieve("""https://script.google.com/macros/s/AKfycbw0nerGGY1Q0KePlvRGMceROW948Gi1dQtr9G81lpSHueK2ofs/exec?email=%s&de=%s&msg=%s"""%(self.email.text(),self.de.toPlainText(),self.msg),"temp.html")
             errorbox = QtGui.QMessageBox(self)
             errorbox.setWindowTitle("Error")
             errorbox.setText("Email sent thank you :)")

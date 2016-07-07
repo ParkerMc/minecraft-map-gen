@@ -8,7 +8,9 @@
 # Copyright:   (c) ParkerMc 2016
 # Licence:     MIT
 #-------------------------------------------------------------------------------
-import sys, os, subprocess, platform, warn, close, mapstm, worldstm
+import error, sys
+sys.excepthook = error.excepthook
+import os, subprocess, platform, warn, close, mapstm, worldstm
 from PyQt4 import QtGui, QtCore, uic
 from PyQt4.QtCore import QThread
 
@@ -243,13 +245,15 @@ class Main(QtGui.QMainWindow, form_class):
     def save(self):
         if self.filep == "":
             try:
+                self.filep = ""
                 self.filep = QtGui.QFileDialog.getSaveFileName(filter="Config File (*.cfg)")
             except: return False
-        output = self.genOut()
-        f = open(str(self.filep).replace("\\","/"),"w")
-        f.write(output)
-        f.close()
-        return True
+        if self.filep != "":
+            output = self.genOut()
+            f = open(str(self.filep).replace("\\","/"),"w")
+            f.write(output)
+            f.close()
+            return True
     def warncell(self, a, b, i):
         print str(a)+"-"+str(b)+"-"+str(i)
     def warn(self, i):
