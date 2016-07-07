@@ -1,3 +1,7 @@
+#unneed files that program makes
+Error.log
+temp.html
+
 #Overviwer
 32bit/
 64bit/
