@@ -77,9 +77,16 @@ class Main(QtGui.QMainWindow, form_class):
         self.rmode.currentIndexChanged.connect(self.rmodec)
         self.rmoden.currentIndexChanged.connect(self.rmodenc)
         self.run.clicked.connect(self.srun)
+        self.actionWebsite.triggered.connect(self.actionWebsitef)
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.savekey)
         QtGui.QShortcut(QtGui.QKeySequence("Ctrl+R"), self, self.runkey)
         self.dump()
+
+    def actionWebsitef(self):
+            msgbox = QtGui.QMessageBox(self)
+            msgbox.setWindowTitle("Minecraft Map Gen")
+            msgbox.setText("<a href='http://ParkerMc.ddns.net'> ParkerMc.ddns.net </a>")
+            msgbox.exec_()
 
     def runkey(self,no="no"):
         if no == "no":
@@ -285,37 +292,32 @@ class Main(QtGui.QMainWindow, form_class):
 
 class Worker(QThread):
 
-    def go(self):
-        self.go = True
-
     def run(self):
-        self.go = False
         global go
         global sel
-        while go == False:
-            None
         global fileo
         global stop
-        if not stop:
-            if platform.system() == "Windows" and platform.architecture() == "32Bit":
-                proc = subprocess.Popen("32bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
-                print "32bit\\overviewer.exe --config="+fileo
-            if platform.system() == "Windows" and platform.architecture() == "64Bit":
-                proc = subprocess.Popen("64bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
-            if platform.system() == "Linux":
-                proc = subprocess.Popen("overviewer.py --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
-            while True:
-                line = proc.stdout.readline()
-                if line.strip() == "":
-                    pass
-                else:
-                    print line.strip()
-                    sel.output.append(line.strip())
-                if not line: break
-                if stop: break
-            proc.wait()
+        while not stop:
+            if go:
+                if platform.system() == "Windows" and platform.architecture() == "32Bit":
+                    proc = subprocess.Popen("32bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                    print "32bit\\overviewer.exe --config="+fileo
+                if platform.system() == "Windows" and platform.architecture() == "64Bit":
+                    proc = subprocess.Popen("64bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                if platform.system() == "Linux":
+                    proc = subprocess.Popen("overviewer.py --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                while not stop:
+                    line = proc.stdout.readline()
+                    if line.strip() == "":
+                        pass
+                    else:
+                        print line.strip()
+                        sel.output.append(line.strip())
+                    if not line: break
+                    if stop: break
+                proc.wait()
+                go = False
 
-def slot(arg='finished'): print(arg)
 thread = Worker()
 thread.start()
 global stop
