@@ -10,7 +10,7 @@
 #-------------------------------------------------------------------------------
 import error, sys
 sys.excepthook = error.excepthook
-from PyQt4 import QtGui, uic
+from PyQt4 import QtGui, uic, QtCore
 
 def imgforc(self,a):
     item = QtGui.QTableWidgetItem()

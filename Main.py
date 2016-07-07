@@ -231,24 +231,6 @@ class Main(QtGui.QMainWindow, form_class):
     def packbf(self):
         self.packt.setText(QtGui.QFileDialog.getOpenFileName(directory=self.packt.text(),filter="Texture Pack (*.zip; *.jar)"))
 
-    def genOut(self):
-        output = "#Made with a generator by ParkerMc\n####Do NOT edit####\n"
-        output += "#"+self.outputt.text()+"\n"+ "#"+self.packt.text()+"\n#"+str(self.processes.value())+"\n#"+str(self.worlds).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n#"+str(self.maps).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n \n"
-        for i, j in self.worlds:
-            output += 'worlds["world_'+i+'"] = "'+ j.replace("level.dat","") +'"\n'
-        for i, j, k, l, m, n, o in self.maps:
-            output += 'renders["'+str(i)+'"] = {\n    "world": "world_'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'
-            if str(k) == "Nether":
-                output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting")
-            elif str(k) != "Nether":
-                output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting").replace("Night","night").replace("Smooth Night","smooth_night").replace("Cave","cave")
-
-            output += '",\n    "dimension": "'+str(k).replace("Overworld","overworld").replace("Nether","nether").replace("End","end")+'",\n    "northdirection" : "'+str(m).replace("Upper Left","upper-left").replace("Upper Right","upper-right").replace("Lower Left","lower-left").replace("Lower Right","lower-right")+'",\n    "imgformat" : "'+str(n).replace("Png","png").replace("Jpg","jpg").replace("Jpeg","jpeg")+'",\n    "imgquality" : "'+str(o)+'",\n } \n \n'
-        output += 'outputdir = "'+str(self.outputt.text()).replace("\\","/")+'"'
-        if str(self.packt.text()).replace("","") != "":
-            output += '\ntexturepath = "'+str(self.packt.text()).replace("\\","/")+'"'
-        return output
-
     def save(self):
         if self.filep == "":
             try:
@@ -256,11 +238,7 @@ class Main(QtGui.QMainWindow, form_class):
                 self.filep = QtGui.QFileDialog.getSaveFileName(filter="Config File (*.cfg)")
             except: return False
         if self.filep != "":
-            output = self.genOut()
-            f = open(str(self.filep).replace("\\","/"),"w")
-            f.write(output)
-            f.close()
-            return True
+            rsave()
     def warncell(self, a, b, i):
         print str(a)+"-"+str(b)+"-"+str(i)
     def warn(self, i):
@@ -291,21 +269,47 @@ class Main(QtGui.QMainWindow, form_class):
 
 
 class Worker(QThread):
+    def genOut(self):
+        global sel
+        output = "#Made with a generator by ParkerMc\n####Do NOT edit####\n"
+        output += "#"+sel.outputt.text()+"\n"+ "#"+sel.packt.text()+"\n#"+str(sel.processes.value())+"\n#"+str(sel.worlds).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n#"+str(sel.maps).replace("[","").replace("]","").replace("(","").replace(")","").replace("'","")+"\n \n"
+        for i, j in sel.worlds:
+            output += 'worlds["world_'+i+'"] = "'+ j.replace("level.dat","") +'"\n'
+        for i, j, k, l, m, n, o in sel.maps:
+            output += 'renders["'+str(i)+'"] = {\n    "world": "world_'+str(j)+'",\n    "title": "'+str(i)+'",\n    "rendermode": "'
+            if str(k) == "Nether":
+                output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting")
+            elif str(k) != "Nether":
+                output += str(l).replace("Normal","normal").replace("lighting","lighting").replace("Smooth Light","smooth_lighting").replace("Night","night").replace("Smooth Night","smooth_night").replace("Cave","cave")
+
+            output += '",\n    "dimension": "'+str(k).replace("Overworld","overworld").replace("Nether","nether").replace("End","end")+'",\n    "northdirection" : "'+str(m).replace("Upper Left","upper-left").replace("Upper Right","upper-right").replace("Lower Left","lower-left").replace("Lower Right","lower-right")+'",\n    "imgformat" : "'+str(n).replace("Png","png").replace("Jpg","jpg").replace("Jpeg","jpeg")+'",\n    "imgquality" : "'+str(o)+'",\n } \n \n'
+        output += 'outputdir = "'+str(sel.outputt.text()).replace("\\","/")+'"'
+        if str(sel.packt.text()).replace("","") != "":
+            output += '\ntexturepath = "'+str(sel.packt.text()).replace("\\","/")+'"'
+        return output
+
 
     def run(self):
         global go
         global sel
         global fileo
         global stop
+        global genoutput
+        global sel
         while not stop:
+            if genoutput:
+                output = self.genOut()
+                f = open(str(sel.filep).replace("\\","/"),"w")
+                f.write(output)
+                f.close()
+                genoutput = False
             if go:
                 if platform.system() == "Windows" and platform.architecture() == "32Bit":
-                    proc = subprocess.Popen("32bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
-                    print "32bit\\overviewer.exe --config="+fileo
+                    proc = subprocess.Popen('32bit\\overviewer.exe --config="'+str(fileo)+'"', shell=True, stdout=subprocess.PIPE)
                 if platform.system() == "Windows" and platform.architecture() == "64Bit":
-                    proc = subprocess.Popen("64bit\\overviewer.exe --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                    proc = subprocess.Popen('64bit\\overviewer.exe --config="'+str(fileo)+'"', shell=True, stdout=subprocess.PIPE)
                 if platform.system() == "Linux":
-                    proc = subprocess.Popen("overviewer.py --config="+str(fileo), shell=True, stdout=subprocess.PIPE)
+                    proc = subprocess.Popen('overviewer.py --config="'+str(fileo)+'"', shell=True, stdout=subprocess.PIPE)
                 while not stop:
                     line = proc.stdout.readline()
                     if line.strip() == "":
@@ -320,6 +324,8 @@ class Worker(QThread):
 
 thread = Worker()
 thread.start()
+global genoutput
+genoutput = False
 global stop
 stop = False
 global go
@@ -327,6 +333,9 @@ go = False
 def run():
     global go
     go = True
+def rsave():
+    global genoutput
+    genoutput = True
 def stopn():
     global stop
     run()
