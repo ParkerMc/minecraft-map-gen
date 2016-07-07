@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../assets/icon.ico</normaloff>../assets/icon.ico</iconset>
+    <normaloff>assets/icon.ico</normaloff>assets/icon.ico</iconset>
   </property>
   <widget class="QPushButton" name="yes">
    <property name="geometry">

@@ -28,8 +28,6 @@ def main():
     #make folders to use
     if not os.path.exists("temp"):
         os.makedirs("temp")
-    if not os.path.exists("linux"):
-        os.makedirs("linux")
     if not os.path.exists("32bit"):
         os.makedirs("32bit")
     if not os.path.exists("64bit"):

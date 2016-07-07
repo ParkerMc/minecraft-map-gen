@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../assets/icon.ico</normaloff>../assets/icon.ico</iconset>
+    <normaloff>assets/icon.ico</normaloff>assets/icon.ico</iconset>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">

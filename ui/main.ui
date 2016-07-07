@@ -228,7 +228,7 @@
        </rect>
       </property>
       <property name="editTriggers">
-       <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+       <set>QAbstractItemView::AllEditTriggers</set>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
@@ -268,10 +268,21 @@
        <property name="text">
         <string>Name</string>
        </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
       </item>
       <item row="0" column="1">
        <property name="text">
         <string>Path</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
       </item>
      </widget>
@@ -293,7 +304,7 @@
        </rect>
       </property>
       <property name="editTriggers">
-       <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+       <set>QAbstractItemView::AllEditTriggers</set>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
@@ -361,55 +372,93 @@
        <property name="text">
         <string>Name</string>
        </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
       </item>
       <item row="0" column="1">
        <property name="text">
         <string>World</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
        </property>
       </item>
       <item row="0" column="2">
        <property name="text">
         <string>Dimension</string>
        </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
       </item>
       <item row="0" column="3">
        <property name="text">
         <string>Rendermode</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
        </property>
       </item>
       <item row="0" column="4">
        <property name="text">
         <string>North Direction</string>
        </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
       </item>
       <item row="0" column="5">
        <property name="text">
         <string>Image Format</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
        </property>
       </item>
       <item row="0" column="6">
        <property name="text">
         <string>Image Quality</string>
        </property>
+       <property name="flags">
+        <set>ItemIsEnabled</set>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
       </item>
       <item row="1" column="2">
        <property name="text">
         <string>Overworld</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
       </item>
       <item row="1" column="3">
        <property name="text">
         <string>Normal</string>
        </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
       </item>
       <item row="1" column="4">
        <property name="text">
         <string>Upper Left</string>
        </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
       </item>
       <item row="1" column="5">
        <property name="text">
         <string>Png</string>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
       </item>
       <item row="1" column="6">
@@ -449,8 +498,8 @@
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QCommandLinkButton" name="cancel">
@@ -477,7 +526,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
